@@ -1,8 +1,9 @@
 ﻿@page "/quran"
 @inject QuranApp.Services.QuranService QuranService
+@rendermode InteractiveServer
+
 <h1>Quran Reader</h1>
-<p>Welcome to the Quran Reader! Here you can read the Quran in Arabic and English translations.</p>
-<h1>Quran Reader</h1>
+<p>Welcome to the Quran Reader!</p>
 
 @if (surahs == null)
 {
@@ -13,17 +14,37 @@ else
     <ul>
         @foreach (var surah in surahs)
         {
-            <li>
+            <li @onclick="() => SelectSurah(surah.Number)" style="cursor:pointer">
                 @surah.Number - @surah.EnglishName
+            </li>
+        }
+    </ul>
+}
+
+@if (ayahs != null)
+{
+    <h2>Surah @selectedSurah</h2>
+    <ul>
+        @foreach (var ayah in ayahs)
+        {
+            <li>
+                @ayah.Number - @ayah.Text
             </li>
         }
     </ul>
 }
 @code {
     private List<QuranApp.Services.Surah>? surahs;
+    private List<QuranApp.Services.Ayah>? ayahs;
+    private int selectedSurah = 0;
 
     protected override async Task OnInitializedAsync()
     {
         surahs = await QuranService.GetSurahsAsync();
+    }
+    private async Task SelectSurah(int surahNumber)
+    {
+        selectedSurah = surahNumber;
+        ayahs = await QuranService.GetAyahsAsync(surahNumber);
     }
 }

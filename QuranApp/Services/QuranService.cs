@@ -17,17 +17,44 @@
             return response?.Data ?? new List<Surah>();
         }
 
+        public async Task<List<Ayah>> GetAyahsAsync(int surahNumber)
+        {
+            var response = await _http.GetFromJsonAsync<AyahResponse>
+            ($"https://api.alquran.cloud/v1/surah/{surahNumber}");
+
+            return response?.Data?.Ayahs ?? new List<Ayah>();
+        }
+    }
+
         public class QuranResponse
         {
             public List<Surah> Data { get; set; } = new();
+
+        }
+
+        public class AyahResponse
+        {
+            public AyahData Data { get; set; } = new();
+        }
+
+        public class AyahData
+        {
+            public List<Ayah> Ayahs { get; set; } = new();
+        }
+
+        public class Surah
+        {
+            public int Number { get; set; }
+            public string Name { get; set; } = "";
+            public string EnglishName { get; set; } = "";
+            public int NumberOfAyahs { get; set; }
+
+        }
+        public class Ayah
+        {
+            public int Number { get; set; }
+            public string Text { get; set; } = "";
         }
     }
-    public class Surah
-    {
-        public int Number { get; set; }
-        public string Name { get; set; } = "";
-        public string EnglishName { get; set; } = "";
-        public int NumberOfAyahs { get; set; }
-        
-    }
-}
+
+
