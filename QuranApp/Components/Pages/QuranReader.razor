@@ -1,4 +1,29 @@
 ﻿@page "/quran"
-
+@inject QuranApp.Services.QuranService QuranService
 <h1>Quran Reader</h1>
 <p>Welcome to the Quran Reader! Here you can read the Quran in Arabic and English translations.</p>
+<h1>Quran Reader</h1>
+
+@if (surahs == null)
+{
+    <p>Loading Surahs...</p>
+}
+else
+{
+    <ul>
+        @foreach (var surah in surahs)
+        {
+            <li>
+                @surah.Number - @surah.EnglishName
+            </li>
+        }
+    </ul>
+}
+@code {
+    private List<QuranApp.Services.Surah>? surahs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        surahs = await QuranService.GetSurahsAsync();
+    }
+}
