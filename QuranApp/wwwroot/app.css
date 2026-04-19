@@ -58,3 +58,74 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+/* Quran Reader Styles */
+.quran-container {
+    background-color: #f5f0e8;
+    min-height: 100vh;
+    padding: 0;
+}
+
+.quran-header {
+    background-color: #2e7d52;
+    color: white;
+    padding: 15px 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.surah-card {
+    background-color: #fdf6e3;
+    border: 1px solid #c8a96e;
+    margin: 8px 15px;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .surah-card:hover {
+        background-color: #f0e6d0;
+    }
+
+.surah-english {
+    color: #5d4037;
+    font-size: 16px;
+}
+
+.surah-arabic {
+    color: #5d4037;
+    font-size: 20px;
+    font-family: 'Traditional Arabic', serif;
+}
+
+.ayah-container {
+    background-color: #fdf6e3;
+    border: 2px solid #c8a96e;
+    margin: 15px;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: right;
+    direction: rtl;
+}
+
+.ayah-text {
+    font-size: 22px;
+    color: #3e2723;
+    font-family: 'Traditional Arabic', serif;
+    line-height: 2;
+}
+
+.ayah-number {
+    display: inline-block;
+    background-color: #2e7d52;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 12px;
+    margin: 0 5px;
+}
