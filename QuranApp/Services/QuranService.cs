@@ -20,9 +20,16 @@
         public async Task<List<Ayah>> GetAyahsAsync(int surahNumber)
         {
             var response = await _http.GetFromJsonAsync<AyahResponse>
-            ($"https://api.alquran.cloud/v1/surah/{surahNumber}/quran-uthmani");
+            ($"https://api.alquran.cloud/v1/surah/{surahNumber}/ar.alafasy");
 
             return response?.Data?.Ayahs ?? new List<Ayah>();
+        }
+        public async Task<List<TranslationAyah>> GetTranslationAsync(int surahNumber, string language = "en.asad")
+        {
+            var response = await _http.GetFromJsonAsync<TranslationResponse>
+            ($"http://api.alquran.cloud/v1/surah/{surahNumber}/{language}");
+
+            return response?.Data?.Ayahs ?? new List<TranslationAyah>();
         }
     }
 
@@ -55,6 +62,8 @@
         public int Number { get; set; }
         public string Text { get; set; } = "";
         public int NumberInSurah { get; set; }
+        public string Audio { get; set; } = "";
+
 
         public string TextWithoutBismillah
         {
@@ -71,6 +80,22 @@
             }
         }
     }
+    public class TranslationAyah
+    {
+        public int NumberInSurah { get; set; }
+        public string Text { get; set; } = "";
     }
+
+    public class TranslationData
+    {
+        public List<TranslationAyah> Ayahs { get; set; } = new();
+    }
+
+    public class TranslationResponse
+    {
+        public TranslationData Data { get; set; } = new();
+    }
+
+}
 
 

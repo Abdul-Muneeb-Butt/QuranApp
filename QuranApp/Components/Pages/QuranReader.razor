@@ -6,6 +6,13 @@
     <div class="quran-header">
         Quran Reader
     </div>
+    <div style="padding:10px 15px; background:#f5f0e8;">
+        <input @bind="searchText"
+               @bind:event="oninput"
+               placeholder="Search Surah..."
+               style="width:100%; padding:8px; border:1px solid #c8a96e;
+        border-radius:5px; font-size:16px;" />
+    </div>
 
     @if (surahs == null)
     {
@@ -13,7 +20,9 @@
     }
     else if (ayahs == null)
     {
-        @foreach (var surah in surahs)
+        @foreach (var surah in surahs.Where(s =>
+    s.EnglishName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+    s.Number.ToString().Contains(searchText)))
         {
             <div class="surah-card" @onclick="() => SelectSurah(surah.Number)">
                 <div class="surah-english">
@@ -31,11 +40,31 @@
             <div class="surah-title-frame">
                 <h2 style="color:#2e7d52;">@selectedSurahName</h2>
             </div>
+            <div style="text-align:center; margin-bottom:15px;">
+                <button @onclick="ToggleTranslation"
+                        style="background:#2e7d52; color:white; border:none;
+                    padding:8px 20px; border-radius:5px; cursor:pointer; margin-right:10px;">
+                    📖 Translation
+                </button>
+
+                @if (showTranslation)
+                {
+                    <select @onchange="ChangeLanguage"
+                            style="padding:8px; border:1px solid #c8a96e;
+                        border-radius:5px; font-size:14px;">
+                        <option value="en.asad">English</option>
+                        <option value="ur.jalandhry">Urdu</option>
+                        <option value="fa.makarem">Persian</option>
+                    </select>
+                }
+               <audio id="quranAudio" src="@currentAudioUrl" autoplay></audio>
+            </div>
 
             
-
             @foreach (var ayah in ayahs)
             {
+                var translation = translations?.FirstOrDefault(t => t.NumberInSurah == ayah.NumberInSurah);
+
                 if (ayah.NumberInSurah == 1)
                 {
                     <div style="text-align:center; font-size:28px;
@@ -43,16 +72,56 @@
                         direction:rtl;">
                         بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                     </div>
+                    @if (selectedSurah == 1)
+                    {
+                        <div style="@(showTranslation ? "border-bottom:1px solid #c8a96e; padding:10px 0; margin-bottom:10px;" : "display:inline;")">
+                            <span class="ayah-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
+                            <span class="ayah-number">1</span>
+
+                            @if (showTranslation && translation != null)
+                            {
+                                <div style="color:#5d4037; font-size:15px; margin-top:5px; direction:ltr; text-align:left;">
+                                    @translation.Text
+                                </div>
+                            }
+                        </div>
+                    }
                     @if (!string.IsNullOrWhiteSpace(ayah.TextWithoutBismillah))
                     {
-                        <span class="ayah-text">@ayah.TextWithoutBismillah</span>
-                        <span class="ayah-number">1</span>
+                        <div style="@(showTranslation ? "border-bottom:1px solid #c8a96e; padding:10px 0; margin-bottom:10px;" : "display:inline;")">
+                            <span class="ayah-text">@ayah.TextWithoutBismillah</span>
+                            <span class="ayah-number">1</span>
+                            @if (showTranslation && translation != null)
+                            {
+                                <div style="color:#5d4037; font-size:15px; margin-top:5px; direction:ltr; text-align:left;">
+                                    @translation.Text
+                                </div>
+                            }
+                        </div>
                     }
                 }
                 else
                 {
-                    <span class="ayah-text">@ayah.Text</span>
-                    <span class="ayah-number">@ayah.NumberInSurah</span>
+                    <div style="@(showTranslation ? "border-bottom:1px solid #c8a96e; padding:10px 0; margin-bottom:10px;" : "display:inline;")">
+                        <span class="ayah-text">@ayah.Text</span>
+                        <span class="ayah-number">@ayah.NumberInSurah</span>
+                        @if (!string.IsNullOrEmpty(ayah.Audio))
+                        {
+                            <button @onclick="() => PlayAudio(ayah.Audio)"
+                                    style="background:none; border:1px solid #2e7d52;
+                                border-radius:50%; width:30px; height:30px;
+                                cursor:pointer; color:#2e7d52; font-size:14px;
+                                margin-left:5px;">
+                                ▶
+                            </button>
+                        }
+                        @if (showTranslation && translation != null)
+                        {
+                            <div style="color:#5d4037; font-size:15px; margin-top:5px; direction:ltr; text-align:left;">
+                                @translation.Text
+                            </div>
+                        }
+                    </div>
                 }
             }
         </div>
@@ -69,6 +138,11 @@
     private List<QuranApp.Services.Surah>? surahs;
     private List<QuranApp.Services.Ayah>? ayahs;
     private int selectedSurah = 0;
+    private string searchText = "";
+    private List<QuranApp.Services.TranslationAyah>? translations;
+    private string selectedLanguage = "en.asad";
+    private bool showTranslation = false;
+    private string currentAudioUrl = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,15 +152,37 @@
     private async Task SelectSurah(int surahNumber)
     {
         selectedSurah = surahNumber;
-        selectedSurahName = surahs?.FirstOrDefault
-        (s => s.Number == surahNumber)?.EnglishName ?? "";
+        selectedSurahName = surahs?.FirstOrDefault(s => s.Number == surahNumber)?.EnglishName ?? "";
         ayahs = await QuranService.GetAyahsAsync(surahNumber);
+        translations = await QuranService.GetTranslationAsync(surahNumber, selectedLanguage);
     }
 
+    private async Task ToggleTranslation()
+    {
+        showTranslation = !showTranslation;
+        if (showTranslation && translations == null)
+        {
+            translations = await QuranService.GetTranslationAsync(selectedSurah, selectedLanguage);
+        }
+    }
+
+    private async Task ChangeLanguage(ChangeEventArgs e)
+    {
+        selectedLanguage = e.Value?.ToString() ?? "en.asad";
+        translations = await QuranService.GetTranslationAsync(selectedSurah, selectedLanguage);
+    }
     private void GoBack()
     {
         ayahs = null;
         selectedSurah = 0;
         selectedSurahName = "";
+        translations = null;
+        showTranslation = false;
+    }
+    private void PlayAudio(string audioUrl)
+    {
+        currentAudioUrl = "";
+        StateHasChanged();
+        currentAudioUrl = audioUrl;
     }
 }
