@@ -2,9 +2,6 @@
 @inject QuranApp.Services.QuranService QuranService
 @rendermode InteractiveServer
 
-<h1>Quran Reader</h1>
-<p>Welcome to the Quran Reader!</p>
-
 <div class="quran-container">
     <div class="quran-header">
         Quran Reader
@@ -30,14 +27,33 @@
     }
     else
     {
-        <div class="ayah-container">
-            <h2 style="color:#2e7d52; text-align:center;">
-                @selectedSurahName
-            </h2>
+        <div class="ayah-container islamic-frame">
+            <div class="surah-title-frame">
+                <h2 style="color:#2e7d52;">@selectedSurahName</h2>
+            </div>
+
+            
+
             @foreach (var ayah in ayahs)
             {
-                <span class="ayah-text">@ayah.Text</span>
-                <span class="ayah-number">@ayah.Number</span>
+                if (ayah.NumberInSurah == 1)
+                {
+                    <div style="text-align:center; font-size:28px;
+                        color:#2e7d52; margin-bottom:25px;
+                        direction:rtl;">
+                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(ayah.TextWithoutBismillah))
+                    {
+                        <span class="ayah-text">@ayah.TextWithoutBismillah</span>
+                        <span class="ayah-number">1</span>
+                    }
+                }
+                else
+                {
+                    <span class="ayah-text">@ayah.Text</span>
+                    <span class="ayah-number">@ayah.NumberInSurah</span>
+                }
             }
         </div>
         <button @onclick="GoBack"
@@ -47,6 +63,7 @@
         </button>
     }
 </div>
+
 @code {
     private string selectedSurahName = "";
     private List<QuranApp.Services.Surah>? surahs;
@@ -57,12 +74,15 @@
     {
         surahs = await QuranService.GetSurahsAsync();
     }
+
     private async Task SelectSurah(int surahNumber)
     {
         selectedSurah = surahNumber;
-        selectedSurahName = surahs?.FirstOrDefault(s => s.Number == surahNumber)?.EnglishName ?? "";
+        selectedSurahName = surahs?.FirstOrDefault
+        (s => s.Number == surahNumber)?.EnglishName ?? "";
         ayahs = await QuranService.GetAyahsAsync(surahNumber);
     }
+
     private void GoBack()
     {
         ayahs = null;

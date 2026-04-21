@@ -20,7 +20,7 @@
         public async Task<List<Ayah>> GetAyahsAsync(int surahNumber)
         {
             var response = await _http.GetFromJsonAsync<AyahResponse>
-            ($"https://api.alquran.cloud/v1/surah/{surahNumber}");
+            ($"https://api.alquran.cloud/v1/surah/{surahNumber}/quran-uthmani");
 
             return response?.Data?.Ayahs ?? new List<Ayah>();
         }
@@ -50,11 +50,27 @@
             public int NumberOfAyahs { get; set; }
 
         }
-        public class Ayah
+    public class Ayah
+    {
+        public int Number { get; set; }
+        public string Text { get; set; } = "";
+        public int NumberInSurah { get; set; }
+
+        public string TextWithoutBismillah
         {
-            public int Number { get; set; }
-            public string Text { get; set; } = "";
+            get
+            {
+                // Bismillah is always first 38-40 characters
+                // Count characters in: بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+                if (Text.Length > 38)
+                {
+                    return Text.Substring(39).Trim();
+                }
+                // If text is only Bismillah return empty
+                return "";
+            }
         }
+    }
     }
 
 
