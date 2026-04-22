@@ -64,7 +64,8 @@
         public int NumberInSurah { get; set; }
         public string Audio { get; set; } = "";
 
-
+        public string AudioUrl =>
+        $"https://cdn.islamic.network/quran/audio/128/ar.alafasy/{Number}.mp3";
         public string TextWithoutBismillah
         {
             get
