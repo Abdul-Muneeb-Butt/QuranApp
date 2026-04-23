@@ -19,6 +19,11 @@ namespace QuranApp.Services
 
             return response?.Data?.Timings;
         }
+
+    }
+    public class PrayerApiResponse
+    {
+        public PrayerData? Data { get; set; }
     }
 }
 }
