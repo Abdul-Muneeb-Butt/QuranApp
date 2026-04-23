@@ -1,5 +1,6 @@
 ﻿@page "/quran"
 @inject QuranApp.Services.QuranService QuranService
+@inject IJSRuntime JS
 @rendermode InteractiveServer
 
 <div class="quran-container">
@@ -134,14 +135,7 @@
                 }
             }
 
-            @if (currentPlayingAyah > 0)
-            {
-                var playingAyah = ayahs?.FirstOrDefault(a => a.NumberInSurah == currentPlayingAyah);
-                @if (playingAyah != null && !string.IsNullOrEmpty(playingAyah.Audio))
-                {
-                    <audio src="@playingAyah.AudioUrl" autoplay></audio>
-                }
-            }
+            <audio id="quranAudio"></audio>
 
         </div>
         <button @onclick="GoBack"
@@ -163,6 +157,7 @@
     private bool showTranslation = false;
     private int currentPlayingAyah = 0;
     private bool isPlaying = false;
+    private TaskCompletionSource? _ayahFinished;
 
     protected override async Task OnInitializedAsync()
     {
@@ -201,25 +196,43 @@
         showTranslation = false;
         isPlaying = false;
         currentPlayingAyah = 0;
+        _ayahFinished?.TrySetResult();
     }
 
     private async Task PlayWholeSurah()
     {
         isPlaying = true;
+        var dotNetRef = DotNetObjectReference.Create(this);
+
         foreach (var ayah in ayahs!)
         {
             if (!isPlaying) break;
+
             currentPlayingAyah = ayah.NumberInSurah;
             StateHasChanged();
-            await Task.Delay(5000);
+
+            _ayahFinished = new TaskCompletionSource();
+            await JS.InvokeVoidAsync("playAudioAndWait", dotNetRef, ayah.AudioUrl);
+            await _ayahFinished.Task;
         }
+
         currentPlayingAyah = 0;
         isPlaying = false;
+        StateHasChanged();
     }
 
-    private void StopAudio()
+    [JSInvokable]
+    public void OnAyahFinished()
+    {
+        _ayahFinished?.TrySetResult();
+    }
+
+    private async Task StopAudio()
     {
         isPlaying = false;
         currentPlayingAyah = 0;
+        _ayahFinished?.TrySetResult();
+        await JS.InvokeVoidAsync("eval", "document.getElementById('quranAudio').pause()");
+        StateHasChanged();
     }
 }
