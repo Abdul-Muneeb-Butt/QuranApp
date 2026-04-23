@@ -1,5 +1,4 @@
 ﻿
-using QuranApp.Components.Pages;
 using System.Net.Http.Json;
 namespace QuranApp.Services
 
