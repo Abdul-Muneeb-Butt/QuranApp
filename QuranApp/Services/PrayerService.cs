@@ -25,5 +25,11 @@ namespace QuranApp.Services
     {
         public PrayerData? Data { get; set; }
     }
+    public class PrayerData
+    {
+        public PrayerTimes? Timings { get; set; }
+    }
+
+
 }
 }
