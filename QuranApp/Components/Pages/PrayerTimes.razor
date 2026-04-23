@@ -12,8 +12,80 @@
                @bind:event="oninput"
                placeholder="Search city..."
                style="width:100%; padding:10px; border:1px solid #c8a96e;
-                      border-radius:25px; font-size:16px; box-sizing:border-box;" />
+        border-radius:25px; font-size:16px; box-sizing:border-box;" />
     </div>
+
+    <div style="padding:10px 15px;">
+        <p style="color:#888; font-size:14px; margin-bottom:10px;">🔥 Popular Cities</p>
+
+        @foreach (var c in FilteredCities)
+        {
+            <div @onclick="() => SelectCity(c)"
+                 style="padding:15px; border-bottom:1px solid #eee;
+                cursor:pointer; font-size:16px; color:#333;">
+                📍 @c, Pakistan
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div style="padding:10px 15px; background:#e8f5e9;">
+        <span style="color:#2e7d52; cursor:pointer;" @onclick="GoBack">
+            ← Back to Cities
+        </span>
+    </div>
+
+    <div style="margin:15px; background:white; border-radius:10px;
+        border:1px solid #c8a96e; overflow:hidden;">
+
+        <div style="padding:15px; text-align:center; background:#f5f5f5;
+            border-bottom:1px solid #eee;">
+            <div style="color:#2e7d52; font-size:18px; font-weight:bold;">
+                📍 @city, Pakistan
+            </div>
+            <div style="color:#888; font-size:14px;">
+                @DateTime.Now.ToString("dddd, dd MMMM yyyy")
+            </div>
+        </div>
+
+        @{
+            var prayers = new[]
+            {
+                new { Name = "Fajr", Time = prayerTimes.Fajr, Icon = "🌙" },
+                new { Name = "Sunrise", Time = prayerTimes.Sunrise, Icon = "🌅" },
+                new { Name = "Dhuhr", Time = prayerTimes.Dhuhr, Icon = "☀️" },
+                new { Name = "Asr", Time = prayerTimes.Asr, Icon = "🌤️" },
+                new { Name = "Maghrib", Time = prayerTimes.Maghrib, Icon = "🌇" },
+                new { Name = "Isha", Time = prayerTimes.Isha, Icon = "🌙" }
+            };
+        }
+
+        @foreach (var prayer in prayers)
+        {
+            <div style="display:flex; align-items:center;
+                border-bottom:1px solid #eee;">
+                <div style="background:#2e7d52; color:white;
+                    width:120px; padding:18px 10px;
+                    text-align:center; font-size:16px; font-weight:bold;">
+                    @prayer.Time
+                </div>
+                <div style="padding:18px 20px; font-size:18px; color:#333; flex:1;">
+                    @prayer.Icon @prayer.Name
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (isLoading)
+    {
+        <p style="text-align:center;">Loading...</p>
+    }
+    @if (hasError)
+    {
+        <p style="text-align:center; color:red;">Error loading prayer times.</p>
+    }
+}
 
 @code{
     private List<string> pakistanCities = new()
@@ -30,4 +102,5 @@
     private List<string> FilteredCities => pakistanCities
     .Where(c => c.Contains(searchCity, StringComparison.OrdinalIgnoreCase))
     .ToList();
+
 }
