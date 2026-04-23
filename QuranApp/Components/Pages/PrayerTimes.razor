@@ -36,4 +36,8 @@
 };
 
     private string searchCity = "";
+
+    private List<string> FilteredCities => pakistanCities
+    .Where(c => c.Contains(searchCity, StringComparison.OrdinalIgnoreCase))
+    .ToList();
 }
