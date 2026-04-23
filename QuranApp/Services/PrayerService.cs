@@ -1,4 +1,5 @@
 ﻿
+using QuranApp.Components.Pages;
 using System.Net.Http.Json;
 namespace QuranApp.Services
 
@@ -11,6 +12,13 @@ namespace QuranApp.Services
         {
             _http = http;
         }
+        public async Task<PrayerTimes?> GetPrayerTimesAsync(string city, string country)
+        {
+            var response = await _http.GetFromJsonAsync<PrayerApiResponse>
+            ($"http://api.aladhan.com/v1/timingsByCity?city={city}&country={country}&method=2");
 
+            return response?.Data?.Timings;
+        }
     }
+}
 }
