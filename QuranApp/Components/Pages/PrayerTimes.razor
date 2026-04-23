@@ -48,7 +48,7 @@ else
                 @DateTime.Now.ToString("dddd, dd MMMM yyyy")
             </div>
         </div>
-
+    
         @{
             var prayers = new[]
             {
@@ -102,5 +102,51 @@ else
     private List<string> FilteredCities => pakistanCities
     .Where(c => c.Contains(searchCity, StringComparison.OrdinalIgnoreCase))
     .ToList();
+    private async Task SelectCity(string selectedCity)
+    {
+        city = selectedCity;
+        country = "PK";
+        await LoadPrayerTimes();
+    }
 
+    private void GoBack()
+    {
+        prayerTimes = null;
+        searchCity = "";
+    }
+    protected override Task OnInitializedAsync()
+    {
+        return Task.CompletedTask;
+    }
+    private string city = "";
+    private string country = "PK";
+    private QuranApp.Services.PrayerTimes? prayerTimes;
+    private bool isLoading = false;
+    private bool hasError = false;
+
+    private async Task LoadPrayerTimes()
+    {
+        isLoading = true;
+        hasError = false;
+        prayerTimes = null;
+
+        try
+        {
+            var result = await PrayerService.GetPrayerTimesAsync(city, country);
+            if (result != null)
+            {
+                prayerTimes = result;
+            }
+            else
+            {
+                hasError = true;
+            }
+        }
+        catch
+        {
+            hasError = true;
+        }
+
+        isLoading = false;
+    }
 }
