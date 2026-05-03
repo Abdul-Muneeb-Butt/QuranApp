@@ -147,6 +147,15 @@ else
             {
                 hasError = true;
             }
+
+            var hijri = await PrayerService.GetHijriDateAsync();
+            if (hijri != null)
+            {
+                hijriDay = hijri.Day;
+                hijriWeekday = hijri.Weekday?.En ?? "";
+                hijriMonth = hijri.Month?.En ?? "";
+                hijriYear = hijri.Year;
+            }
         }
         catch
         {
