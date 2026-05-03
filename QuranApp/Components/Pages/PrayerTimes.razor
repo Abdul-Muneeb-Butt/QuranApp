@@ -2,8 +2,8 @@
 @inject QuranApp.Services.PrayerService PrayerService
 @rendermode InteractiveServer
 
-<div class="quran-header">
-    🕌 Prayer Times
+<div style="background:#2e7d52; padding:15px 20px;">
+    <h2 style="color:white; margin:0; font-size:20px;">🕌 Prayer Times</h2>
 </div>
 
 @if (prayerTimes == null)
@@ -13,7 +13,7 @@
                @bind:event="oninput"
                placeholder="Search city..."
                style="width:100%; padding:10px; border:1px solid #c8a96e;
-        border-radius:25px; font-size:16px; box-sizing:border-box;" />
+                      border-radius:25px; font-size:16px; box-sizing:border-box;" />
     </div>
 
     <div style="padding:10px 15px;">
@@ -22,7 +22,7 @@
         {
             <div @onclick="() => SelectCity(c)"
                  style="padding:15px; border-bottom:1px solid #eee;
-                cursor:pointer; font-size:16px; color:#333;">
+                        cursor:pointer; font-size:16px; color:#333;">
                 📍 @c, Pakistan
             </div>
         }
@@ -39,47 +39,48 @@
 }
 else
 {
-    <div style="padding:10px 15px; background:#e8f5e9;">
-        <span style="color:#2e7d52; cursor:pointer;" @onclick="GoBack">
+    <div style="padding:10px 15px; background:#f5f5f5; border-bottom:1px solid #eee;">
+        <span style="color:#2e7d52; cursor:pointer; font-size:15px;" @onclick="GoBack">
             ← Back to Cities
         </span>
     </div>
 
     <div style="background:#2e7d52; padding:15px; text-align:center;
-        position:relative; overflow:hidden; min-height:150px;">
+                position:relative; overflow:hidden; min-height:160px;">
 
-        <img src="/images/mosque.png"
-             style="position:absolute; bottom:0; left:0; width:100%;
-        opacity:0.2; height:120px; object-fit:cover;" />
-
-        <div style="color:white; font-size:16px; margin-bottom:10px;">
+        <div style="color:white; font-size:14px; margin-bottom:10px;
+                    position:relative; z-index:2;">
             📍 @city, Pakistan
         </div>
 
-        <div style="display:flex; justify-content:center; gap:0;
-            background:white; border-radius:10px;
-            margin:0 20px; overflow:hidden; position:relative; z-index:1;">
+        <img src="/images/mosque.png"
+             style="position:absolute; bottom:0; left:0; width:100%;
+                    opacity:0.3; height:130px; object-fit:cover;" />
 
-            <div style="flex:1; padding:15px; border-right:1px solid #eee;">
-                <div style="color:#2e7d52; font-size:13px;">
-                    @DateTime.Now.ToString("dddd")
+        <div style="display:flex; justify-content:center; gap:0;
+                    background:white; border-radius:10px;
+                    margin:0 20px; overflow:hidden; position:relative; z-index:1;">
+
+            <div style="flex:1; padding:12px 15px; border-right:1px solid #eee;">
+                <div style="color:#2e7d52; font-size:12px; margin-bottom:4px;">
+                    Today
                 </div>
-                <div style="color:#2e7d52; font-size:36px; font-weight:bold;">
+                <div style="color:#2e7d52; font-size:34px; font-weight:bold; line-height:1;">
                     @DateTime.Now.Day
                 </div>
-                <div style="color:#2e7d52; font-size:13px;">
+                <div style="color:#2e7d52; font-size:12px; margin-top:4px;">
                     @DateTime.Now.ToString("MM/yyyy")
                 </div>
             </div>
 
-            <div style="flex:1; padding:15px;">
-                <div style="color:#2e7d52; font-size:13px;">
+            <div style="flex:1; padding:12px 15px;">
+                <div style="color:#2e7d52; font-size:12px; margin-bottom:4px;">
                     @hijriWeekday
                 </div>
-                <div style="color:#2e7d52; font-size:36px; font-weight:bold;">
+                <div style="color:#2e7d52; font-size:34px; font-weight:bold; line-height:1;">
                     @hijriDay
                 </div>
-                <div style="color:#2e7d52; font-size:13px;">
+                <div style="color:#2e7d52; font-size:12px; margin-top:4px;">
                     @hijriMonth @hijriYear
                 </div>
             </div>
@@ -93,7 +94,7 @@ else
         </div>
         <div style="background:#eee; border-radius:10px; height:6px; overflow:hidden; margin-bottom:5px;">
             <div style="background:#f4c430; height:100%; border-radius:10px;
-                width:@(progressPercent.ToString("F0"))%;">
+                        width:@(progressPercent.ToString("F0"))%;">
             </div>
         </div>
         <div style="text-align:center; color:#f4c430; font-size:13px; font-weight:bold;">
@@ -104,13 +105,13 @@ else
     @foreach (var prayer in GetPrayers())
     {
         <div style="display:flex; align-items:center; border-bottom:1px solid #eee;
-            @(prayer.Name == nextPrayerName ? "background:#fffde7;" : "")">
+                    @(prayer.Name == nextPrayerName ? "background:#fffde7;" : "background:white;")">
             <div style="background:#2e7d52; color:white;
-                width:120px; padding:18px 10px;
-                text-align:center; font-size:16px; font-weight:bold;">
+                        width:110px; padding:18px 10px;
+                        text-align:center; font-size:15px; font-weight:bold;">
                 @prayer.Time
             </div>
-            <div style="padding:18px 20px; font-size:18px; color:#333; flex:1;">
+            <div style="padding:18px 20px; font-size:17px; color:#333; flex:1;">
                 @prayer.Icon @prayer.Name
             </div>
         </div>
@@ -197,6 +198,7 @@ else
         nextPrayerName = "";
         nextPrayerTime = "";
         progressPercent = 0;
+        timeRemaining = "";
     }
 
     private async Task LoadPrayerTimes()
@@ -236,40 +238,39 @@ else
     }
 
     private void CalculateNextPrayer()
-{
-    var now = DateTime.Now.TimeOfDay;
-
-    var prayerList = new[]
     {
-        new { Name = "Fajr", Time = prayerTimes!.Fajr },
-        new { Name = "Sunrise", Time = prayerTimes.Sunrise },
-        new { Name = "Dhuhr", Time = prayerTimes.Dhuhr },
-        new { Name = "Asr", Time = prayerTimes.Asr },
-        new { Name = "Maghrib", Time = prayerTimes.Maghrib },
-        new { Name = "Isha", Time = prayerTimes.Isha }
-    };
+        var now = DateTime.Now.TimeOfDay;
 
-    foreach (var prayer in prayerList)
-    {
-        if (TimeSpan.TryParse(prayer.Time, out var prayerTime))
+        var prayerList = new[]
         {
-            if (now < prayerTime)
+            new { Name = "Fajr", Time = prayerTimes!.Fajr },
+            new { Name = "Sunrise", Time = prayerTimes.Sunrise },
+            new { Name = "Dhuhr", Time = prayerTimes.Dhuhr },
+            new { Name = "Asr", Time = prayerTimes.Asr },
+            new { Name = "Maghrib", Time = prayerTimes.Maghrib },
+            new { Name = "Isha", Time = prayerTimes.Isha }
+        };
+
+        foreach (var prayer in prayerList)
+        {
+            if (TimeSpan.TryParse(prayer.Time, out var prayerTime))
             {
-                nextPrayerName = prayer.Name;
-                nextPrayerTime = prayer.Time;
-                var remaining = prayerTime - now;
-                timeRemaining = $"{(int)remaining.TotalHours}h {remaining.Minutes}m remaining";
-                var totalMinutes = (prayerTime - now).TotalMinutes;
-                progressPercent = 100 - (totalMinutes / 1440 * 100);
-                return;
+                if (now < prayerTime)
+                {
+                    nextPrayerName = prayer.Name;
+                    nextPrayerTime = prayer.Time;
+                    var remaining = prayerTime - now;
+                    timeRemaining = $"{(int)remaining.TotalHours}h {remaining.Minutes}m remaining";
+                    var totalMinutes = (prayerTime - now).TotalMinutes;
+                    progressPercent = 100 - (totalMinutes / 1440 * 100);
+                    return;
+                }
             }
         }
-    }
 
-    nextPrayerName = "Fajr";
-    nextPrayerTime = prayerTimes!.Fajr;
-    timeRemaining = "Tomorrow";
-    progressPercent = 90;
+        nextPrayerName = "Fajr";
+        nextPrayerTime = prayerTimes!.Fajr;
+        timeRemaining = "Tomorrow";
+        progressPercent = 90;
+    }
 }
-    }
-
