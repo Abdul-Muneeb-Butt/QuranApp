@@ -18,7 +18,7 @@ builder.Services.AddHttpClient<QuranService>(client =>
         HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
     };
 });
-
+builder.Services.AddHttpClient<QiblaService>();
 builder.Services.AddHttpClient<PrayerService>();
 builder.Services.AddServerSideBlazor();
 var app = builder.Build();
