@@ -21,5 +21,9 @@ namespace QuranApp.Services
     {
         public QiblaData? Data { get; set; }
     }
+    public class QiblaData
+    {
+        public double Direction { get; set; }
+    }
 }
 
