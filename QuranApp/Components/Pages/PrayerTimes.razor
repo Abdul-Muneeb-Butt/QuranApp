@@ -154,7 +154,12 @@ else
         new { Name = "Isha", Time = prayerTimes.Isha, Icon = "🌙" }
     };
     }
-
+    private class PrayerItem
+{
+    public string Name { get; set; } = "";
+    public string Time { get; set; } = "";
+    public string Icon { get; set; } = "";
+}
     private string searchCity = "";
 
     private List<string> FilteredCities => pakistanCities
