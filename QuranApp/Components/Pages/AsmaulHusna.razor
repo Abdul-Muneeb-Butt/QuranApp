@@ -4,3 +4,33 @@
 <div style="background:#2e7d52; padding:15px 20px;">
     <h2 style="color:white; margin:0; font-size:20px;"> 99 Names of Allah</h2>
 </div>
+<div style="background:#f5f0e8; min-height:100vh; padding:10px;">
+    @foreach (var name in AllahNames)
+    {
+        <div style="background:#fdf6e3; margin:8px 0; border-radius:8px;
+            border:1px solid #c8a96e; padding:15px;
+            box-shadow:0 0 0 3px #f5f0e8, 0 0 0 4px #c8a96e;
+            display:flex; align-items:center; gap:10px;">
+
+            <div style="color:#8B6914; font-size:16px; font-weight:bold;
+                min-width:35px; text-align:center;">
+                @name.Number.
+            </div>
+
+            <div style="flex:1;">
+                <div style="color:#5d3a00; font-size:18px; font-weight:bold;">
+                    @name.English
+                </div>
+                <div style="color:#8B6914; font-size:13px; margin-top:3px;">
+                    @name.Meaning
+                </div>
+            </div>
+
+            <div style="color:#8B6914; font-size:24px;
+                font-family:'Traditional Arabic', serif;
+                text-align:right; min-width:80px;">
+                @name.Arabic
+            </div>
+        </div>
+    }
+</div>
