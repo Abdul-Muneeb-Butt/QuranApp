@@ -1,12 +1,14 @@
 ﻿@page "/qibla"
 @inject QuranApp.Services.QiblaService QiblaService
-@rendermode InteractiveServer
 @inject IJSRuntime JS
+@rendermode InteractiveServer
+
 <div style="background:#2e7d52; min-height:100vh; text-align:center; padding:20px;">
 
-    <div style="background:#2e7d52; padding:15px 20px;">
+    <div style="padding:15px 20px;">
         <h2 style="color:white; margin:0; font-size:20px;">🧭 Qibla Finder</h2>
     </div>
+
     @if (isLoading)
     {
         <p style="color:white; margin-top:50px; font-size:18px;">
@@ -27,29 +29,85 @@
     }
     else if (qiblaDirection > 0)
     {
-        <div style="margin-top:30px; position:relative; display:inline-block;">
-            <img src="/images/compass.jpg"
+        @if (isAligned)
+        {
+            <div style="width:15px; height:15px; border-radius:50%;
+                background:#f4c430; margin:0 auto 10px auto;
+                box-shadow:0 0 15px #f4c430;
+                animation:blink 0.5s infinite;">
+            </div>
+        }
+        else
+        {
+            <div style="width:15px; height:15px; border-radius:50%;
+                background:white; margin:0 auto 10px auto;">
+            </div>
+        }
+
+        <div style="margin-top:10px; position:relative; display:inline-block;">
+
+            <img src="/images/compass.png"
                  style="width:300px; height:300px;" />
+
             <div style="position:absolute; top:50%; left:50%;
-                transform:translate(-50%, -50%) rotate(@(qiblaDirection)deg);
-                font-size:60px; transition: transform 1s ease;">
+                transform:translate(-50%, -50%) rotate(@(needleRotation)deg);
+                font-size:60px; color:#f4c430;
+                transition: transform 0.3s ease;">
                 ▲
             </div>
+
             <img src="/images/kaaba.png"
                  style="position:absolute; bottom:-20px; right:-20px;
-            width:60px; height:60px;" />
+            width:60px; height:60px;
+            @(isAligned ? "filter:drop-shadow(0 0 10px yellow);" : "")" />
         </div>
 
         <div style="color:white; font-size:24px; margin-top:40px;">
-            Qibla: <span style="color:#f4c430; font-weight:bold;">@qiblaDirection.ToString("F1")°</span>
-        </div>
+            Qibla: <span style="color:#f4c430; font-weight:bold;">
+            @qiblaDirection.ToString("F1")°
+        </span>
+    </div>
 
-        <div style="color:#b2dfdb; font-size:13px; margin-top:15px; padding:0 30px;">
-            ⚠ Please keep your device horizontal for accurate reading
-        </div>
-    }
+    <div style="color:#b2dfdb; font-size:13px; margin-top:15px; padding:0 30px;">
+        ⚠ Please keep your device horizontal for accurate reading
+    </div>
+}
 </div>
-@code{
+
+<script>
+    window.getLocationQibla = (dotNetRef) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    dotNetRef.invokeMethodAsync('OnLocationReceived',
+                        position.coords.latitude,
+                        position.coords.longitude);
+                },
+                (error) => {
+                    dotNetRef.invokeMethodAsync('OnLocationError');
+                }
+            );
+        } else {
+            dotNetRef.invokeMethodAsync('OnLocationError');
+        }
+    };
+
+    window.startCompass = (dotNetRef) => {
+        window.addEventListener('deviceorientationabsolute', (event) => {
+            if (event.alpha !== null) {
+                dotNetRef.invokeMethodAsync('OnDeviceRotated', event.alpha);
+            }
+        }, true);
+
+        window.addEventListener('deviceorientation', (event) => {
+            if (event.alpha !== null) {
+                dotNetRef.invokeMethodAsync('OnDeviceRotated', event.alpha);
+            }
+        }, true);
+    };
+</script>
+
+@code {
     private double qiblaDirection = 0;
     private bool isLoading = false;
     private bool hasError = false;
@@ -75,6 +133,7 @@
             }
         }
     }
+
     private async Task GetQibla()
     {
         isLoading = true;
@@ -99,9 +158,11 @@
 
         isLoading = false;
         StateHasChanged();
+
         var dotNetRef = DotNetObjectReference.Create(this);
         await JS.InvokeVoidAsync("startCompass", dotNetRef);
     }
+
     [JSInvokable]
     public void OnLocationError()
     {
@@ -109,6 +170,7 @@
         hasError = true;
         StateHasChanged();
     }
+
     [JSInvokable]
     public void OnDeviceRotated(double heading)
     {
@@ -118,21 +180,3 @@
         StateHasChanged();
     }
 }
-<script>
-    window.getLocationQibla = (dotNetRef) => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    dotNetRef.invokeMethodAsync('OnLocationReceived',
-                        position.coords.latitude,
-                        position.coords.longitude);
-                },
-                (error) => {
-                    dotNetRef.invokeMethodAsync('OnLocationError');
-                }
-            );
-        } else {
-            dotNetRef.invokeMethodAsync('OnLocationError');
-        }
-    };
-</script>
