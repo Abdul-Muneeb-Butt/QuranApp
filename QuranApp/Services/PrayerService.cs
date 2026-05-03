@@ -49,9 +49,13 @@ namespace QuranApp.Services
     public class HijriInfo
     {
         public string Day { get; set; } = "";
-        public string Month { get; set; } = "";
         public string Year { get; set; } = "";
+        public HijriWeekday? Weekday { get; set; }
+        public HijriMonth? Month { get; set; }
     }
-
+    public class HijriWeekday
+    {
+        public string En { get; set; } = "";
+    }
 }
 
