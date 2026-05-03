@@ -99,6 +99,8 @@
 
         isLoading = false;
         StateHasChanged();
+        var dotNetRef = DotNetObjectReference.Create(this);
+        await JS.InvokeVoidAsync("startCompass", dotNetRef);
     }
     [JSInvokable]
     public void OnLocationError()
