@@ -70,5 +70,19 @@
         var dotNetRef = DotNetObjectReference.Create(this);
         await JS.InvokeVoidAsync("getLocation", dotNetRef);
     }
+    [JSInvokable]
+    public async Task OnLocationReceived(double latitude, double longitude)
+    {
+        try
+        {
+            qiblaDirection = await QiblaService.GetQiblaDirectionAsync(latitude, longitude);
+        }
+        catch
+        {
+            hasError = true;
+        }
 
+        isLoading = false;
+        StateHasChanged();
+    }
 }
