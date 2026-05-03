@@ -37,6 +37,11 @@ namespace QuranApp.Services
         public string Maghrib { get; set; } = "";
         public string Isha { get; set; } = "";
     }
+    public class HijriApiResponse
+    {
+        public HijriData? Data { get; set; }
+    }
+
 
 }
 
