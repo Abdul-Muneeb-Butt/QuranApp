@@ -61,4 +61,14 @@
             await GetQibla();
         }
     }
+    private async Task GetQibla()
+    {
+        isLoading = true;
+        hasError = false;
+        StateHasChanged();
+
+        var dotNetRef = DotNetObjectReference.Create(this);
+        await JS.InvokeVoidAsync("getLocation", dotNetRef);
+    }
+
 }
