@@ -107,6 +107,14 @@
         hasError = true;
         StateHasChanged();
     }
+    [JSInvokable]
+    public void OnDeviceRotated(double heading)
+    {
+        deviceHeading = heading;
+        needleRotation = qiblaDirection - heading;
+        isAligned = Math.Abs(needleRotation) < 5;
+        StateHasChanged();
+    }
 }
 <script>
     window.getLocationQibla = (dotNetRef) => {
