@@ -44,6 +44,17 @@
         dotNetRef.invokeMethodAsync('OnLocationError');
         }
         };
+        window.startCompass = (dotNetRef) => {
+        window.addEventListener('deviceorientationabsolute', (event) => {
+        let heading = event.alpha;
+        dotNetRef.invokeMethodAsync('OnDeviceRotated', heading);
+        }, true);
+
+        window.addEventListener('deviceorientation', (event) => {
+        let heading = event.alpha;
+        dotNetRef.invokeMethodAsync('OnDeviceRotated', heading);
+        }, true);
+        };
     </script>
 </body>
 

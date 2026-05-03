@@ -1,7 +1,7 @@
 ﻿@page "/qibla"
 @inject QuranApp.Services.QiblaService QiblaService
-@inject IJSRuntime JS
 @rendermode InteractiveServer
+@inject IJSRuntime JS
 <div style="background:#2e7d52; min-height:100vh; text-align:center; padding:20px;">
 
     <div style="background:#2e7d52; padding:15px 20px;">
@@ -58,7 +58,18 @@
     {
         if (firstRender)
         {
-            await GetQibla();
+            try
+            {
+                await Task.Delay(500);
+                var dotNetRef = DotNetObjectReference.Create(this);
+                await JS.InvokeVoidAsync("getLocationQibla", dotNetRef);
+            }
+            catch
+            {
+                hasError = true;
+                isLoading = false;
+                StateHasChanged();
+            }
         }
     }
     private async Task GetQibla()
@@ -66,10 +77,11 @@
         isLoading = true;
         hasError = false;
         StateHasChanged();
-
+        await Task.Delay(500);
         var dotNetRef = DotNetObjectReference.Create(this);
-        await JS.InvokeVoidAsync("getLocation", dotNetRef);
+        await JS.InvokeVoidAsync("getLocationQibla", dotNetRef);
     }
+
     [JSInvokable]
     public async Task OnLocationReceived(double latitude, double longitude)
     {
@@ -93,3 +105,21 @@
         StateHasChanged();
     }
 }
+<script>
+    window.getLocationQibla = (dotNetRef) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    dotNetRef.invokeMethodAsync('OnLocationReceived',
+                        position.coords.latitude,
+                        position.coords.longitude);
+                },
+                (error) => {
+                    dotNetRef.invokeMethodAsync('OnLocationError');
+                }
+            );
+        } else {
+            dotNetRef.invokeMethodAsync('OnLocationError');
+        }
+    };
+</script>
