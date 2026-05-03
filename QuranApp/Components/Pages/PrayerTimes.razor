@@ -141,19 +141,19 @@ else
         "Abbottabad", "Muzaffarabad", "Gilgit", "Mirpur", "Nawabshah"
     };
 
-    private object[] GetPrayers()
+   private List<PrayerItem> GetPrayers()
+{
+    if (prayerTimes == null) return new();
+    return new List<PrayerItem>
     {
-        if (prayerTimes == null) return Array.Empty<object>();
-        return new[]
-        {
-        new { Name = "Fajr", Time = prayerTimes.Fajr, Icon = "🌙" },
-        new { Name = "Sunrise", Time = prayerTimes.Sunrise, Icon = "🌅" },
-        new { Name = "Dhuhr", Time = prayerTimes.Dhuhr, Icon = "☀️" },
-        new { Name = "Asr", Time = prayerTimes.Asr, Icon = "🌤️" },
-        new { Name = "Maghrib", Time = prayerTimes.Maghrib, Icon = "🌇" },
-        new { Name = "Isha", Time = prayerTimes.Isha, Icon = "🌙" }
+        new PrayerItem { Name = "Fajr", Time = prayerTimes.Fajr, Icon = "🌙" },
+        new PrayerItem { Name = "Sunrise", Time = prayerTimes.Sunrise, Icon = "🌅" },
+        new PrayerItem { Name = "Dhuhr", Time = prayerTimes.Dhuhr, Icon = "☀️" },
+        new PrayerItem { Name = "Asr", Time = prayerTimes.Asr, Icon = "🌤️" },
+        new PrayerItem { Name = "Maghrib", Time = prayerTimes.Maghrib, Icon = "🌇" },
+        new PrayerItem { Name = "Isha", Time = prayerTimes.Isha, Icon = "🌙" }
     };
-    }
+}
     private class PrayerItem
 {
     public string Name { get; set; } = "";
