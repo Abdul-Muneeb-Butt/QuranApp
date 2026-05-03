@@ -91,10 +91,13 @@ else
             <span style="color:#333; font-size:14px;">Next: <b>@nextPrayerName</b></span>
             <span style="color:#333; font-size:14px;">@FormatTime(nextPrayerTime)</span>
         </div>
-        <div style="background:#eee; border-radius:10px; height:6px; overflow:hidden;">
+        <div style="background:#eee; border-radius:10px; height:6px; overflow:hidden; margin-bottom:5px;">
             <div style="background:#f4c430; height:100%; border-radius:10px;
                 width:@(progressPercent.ToString("F0"))%;">
             </div>
+        </div>
+        <div style="text-align:center; color:#f4c430; font-size:13px; font-weight:bold;">
+            ⏱ @timeRemaining
         </div>
     </div>
 
@@ -233,44 +236,11 @@ else
     }
 
     private void CalculateNextPrayer()
+{
+    var now = DateTime.Now.TimeOfDay;
+
+    var prayerList = new[]
     {
-        var now = DateTime.Now.TimeOfDay;
-
-        var prayerList = new[]
-        {
-            new { Name = "Fajr", Time = prayerTimes!.Fajr },
-            new { Name = "Sunrise", Time = prayerTimes.Sunrise },
-            new { Name = "Dhuhr", Time = prayerTimes.Dhuhr },
-            new { Name = "Asr", Time = prayerTimes.Asr },
-            new { Name = "Maghrib", Time = prayerTimes.Maghrib },
-            new { Name = "Isha", Time = prayerTimes.Isha }
-        };
-
-        foreach (var prayer in prayerList)
-        {
-            if (TimeSpan.TryParse(prayer.Time, out var prayerTime))
-            {
-                if (now < prayerTime)
-                {
-                    nextPrayerName = prayer.Name;
-                    nextPrayerTime = prayer.Time;
-                    var totalMinutes = (prayerTime - now).TotalMinutes;
-                    progressPercent = 100 - (totalMinutes / 1440 * 100);
-                    return;
-                }
-            }
-        }
-
-        nextPrayerName = "Fajr";
-        nextPrayerTime = prayerTimes!.Fajr;
-        progressPercent = 90;
-    }
-    private void CalculateNextPrayer()
-    {
-        var now = DateTime.Now.TimeOfDay;
-
-        var prayerList = new[]
-        {
         new { Name = "Fajr", Time = prayerTimes!.Fajr },
         new { Name = "Sunrise", Time = prayerTimes.Sunrise },
         new { Name = "Dhuhr", Time = prayerTimes.Dhuhr },
@@ -279,27 +249,27 @@ else
         new { Name = "Isha", Time = prayerTimes.Isha }
     };
 
-        foreach (var prayer in prayerList)
+    foreach (var prayer in prayerList)
+    {
+        if (TimeSpan.TryParse(prayer.Time, out var prayerTime))
         {
-            if (TimeSpan.TryParse(prayer.Time, out var prayerTime))
+            if (now < prayerTime)
             {
-                if (now < prayerTime)
-                {
-                    nextPrayerName = prayer.Name;
-                    nextPrayerTime = prayer.Time;
-                    var remaining = prayerTime - now;
-                    timeRemaining = $"{(int)remaining.TotalHours}h {remaining.Minutes}m remaining";
-                    var totalMinutes = (prayerTime - now).TotalMinutes;
-                    progressPercent = 100 - (totalMinutes / 1440 * 100);
-                    return;
-                }
+                nextPrayerName = prayer.Name;
+                nextPrayerTime = prayer.Time;
+                var remaining = prayerTime - now;
+                timeRemaining = $"{(int)remaining.TotalHours}h {remaining.Minutes}m remaining";
+                var totalMinutes = (prayerTime - now).TotalMinutes;
+                progressPercent = 100 - (totalMinutes / 1440 * 100);
+                return;
             }
         }
-
-        nextPrayerName = "Fajr";
-        nextPrayerTime = prayerTimes!.Fajr;
-        timeRemaining = "Tomorrow";
-        progressPercent = 90;
     }
 
+    nextPrayerName = "Fajr";
+    nextPrayerTime = prayerTimes!.Fajr;
+    timeRemaining = "Tomorrow";
+    progressPercent = 90;
 }
+    }
+
