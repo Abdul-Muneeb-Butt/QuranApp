@@ -28,6 +28,22 @@
         dotNetRef.invokeMethodAsync('OnAyahFinished');
         };
         };
+        window.getLocation = (dotNetRef) => {
+        if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+        (position) => {
+        dotNetRef.invokeMethodAsync('OnLocationReceived',
+        position.coords.latitude,
+        position.coords.longitude);
+        },
+        (error) => {
+        dotNetRef.invokeMethodAsync('OnLocationError');
+        }
+        );
+        } else {
+        dotNetRef.invokeMethodAsync('OnLocationError');
+        }
+        };
     </script>
 </body>
 
