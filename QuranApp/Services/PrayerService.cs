@@ -19,6 +19,12 @@ namespace QuranApp.Services
             return response?.Data?.Timings;
         }
 
+        public async Task<HijriInfo?> GetHijriDateAsync()
+        {
+            var response = await _http.GetFromJsonAsync<HijriApiResponse>
+            ($"http://api.aladhan.com/v1/gToH?date={DateTime.Now:dd-MM-yyyy}");
+            return response?.Data?.Date;
+        }
     }
     public class PrayerApiResponse
     {
@@ -54,6 +60,10 @@ namespace QuranApp.Services
         public HijriMonth? Month { get; set; }
     }
     public class HijriWeekday
+    {
+        public string En { get; set; } = "";
+    }
+    public class HijriMonth
     {
         public string En { get; set; } = "";
     }
