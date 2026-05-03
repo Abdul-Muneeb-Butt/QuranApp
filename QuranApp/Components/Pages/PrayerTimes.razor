@@ -13,7 +13,7 @@
                @bind:event="oninput"
                placeholder="Search city..."
                style="width:100%; padding:10px; border:1px solid #c8a96e;
-                      border-radius:25px; font-size:16px; box-sizing:border-box;" />
+        border-radius:25px; font-size:16px; box-sizing:border-box;" />
     </div>
 
     <div style="padding:10px 15px;">
@@ -22,7 +22,7 @@
         {
             <div @onclick="() => SelectCity(c)"
                  style="padding:15px; border-bottom:1px solid #eee;
-                        cursor:pointer; font-size:16px; color:#333;">
+                cursor:pointer; font-size:16px; color:#333;">
                 📍 @c, Pakistan
             </div>
         }
@@ -46,19 +46,19 @@ else
     </div>
 
     <div style="background:#2e7d52; padding:15px; text-align:center;
-                position:relative; overflow:hidden; min-height:150px;">
+        position:relative; overflow:hidden; min-height:150px;">
 
         <img src="/images/mosque.png"
              style="position:absolute; bottom:0; left:0; width:100%;
-                    opacity:0.2; height:120px; object-fit:cover;" />
+        opacity:0.2; height:120px; object-fit:cover;" />
 
         <div style="color:white; font-size:16px; margin-bottom:10px;">
             📍 @city, Pakistan
         </div>
 
         <div style="display:flex; justify-content:center; gap:0;
-                    background:white; border-radius:10px;
-                    margin:0 20px; overflow:hidden; position:relative; z-index:1;">
+            background:white; border-radius:10px;
+            margin:0 20px; overflow:hidden; position:relative; z-index:1;">
 
             <div style="flex:1; padding:15px; border-right:1px solid #eee;">
                 <div style="color:#2e7d52; font-size:13px;">
@@ -89,33 +89,29 @@ else
     <div style="padding:12px 15px; background:#f9f9f9; border-bottom:1px solid #eee;">
         <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
             <span style="color:#333; font-size:14px;">Next: <b>@nextPrayerName</b></span>
-            <span style="color:#333; font-size:14px;">@nextPrayerTime</span>
+            <span style="color:#333; font-size:14px;">@FormatTime(nextPrayerTime)</span>
         </div>
         <div style="background:#eee; border-radius:10px; height:6px; overflow:hidden;">
             <div style="background:#f4c430; height:100%; border-radius:10px;
-                        width:@(progressPercent.ToString("F0"))%;">
+                width:@(progressPercent.ToString("F0"))%;">
             </div>
         </div>
     </div>
 
-    
-        @foreach (var prayer in GetPrayers())
-{
-    <div style="display:flex; align-items:center; border-bottom:1px solid #eee;
-                @(prayer.Name == nextPrayerName ? "background:#fffde7;" : "")">
-        <div style="background:#2e7d52; color:white;
-                    width:120px; padding:18px 10px;
-                    text-align:center; font-size:16px; font-weight:bold;">
-            @prayer.Time
+    @foreach (var prayer in GetPrayers())
+    {
+        <div style="display:flex; align-items:center; border-bottom:1px solid #eee;
+            @(prayer.Name == nextPrayerName ? "background:#fffde7;" : "")">
+            <div style="background:#2e7d52; color:white;
+                width:120px; padding:18px 10px;
+                text-align:center; font-size:16px; font-weight:bold;">
+                @prayer.Time
+            </div>
+            <div style="padding:18px 20px; font-size:18px; color:#333; flex:1;">
+                @prayer.Icon @prayer.Name
+            </div>
         </div>
-        <div style="padding:18px 20px; font-size:18px; color:#333; flex:1;">
-            @prayer.Icon @prayer.Name
-        </div>
-    </div>
-}
     }
-
-    
 }
 
 @code {
@@ -131,6 +127,7 @@ else
     private string nextPrayerName = "";
     private string nextPrayerTime = "";
     private double progressPercent = 0;
+    private string timeRemaining = "";
 
     private List<string> pakistanCities = new()
     {
@@ -141,30 +138,42 @@ else
         "Abbottabad", "Muzaffarabad", "Gilgit", "Mirpur", "Nawabshah"
     };
 
-   private List<PrayerItem> GetPrayers()
-{
-    if (prayerTimes == null) return new();
-    return new List<PrayerItem>
-    {
-        new PrayerItem { Name = "Fajr", Time = prayerTimes.Fajr, Icon = "🌙" },
-        new PrayerItem { Name = "Sunrise", Time = prayerTimes.Sunrise, Icon = "🌅" },
-        new PrayerItem { Name = "Dhuhr", Time = prayerTimes.Dhuhr, Icon = "☀️" },
-        new PrayerItem { Name = "Asr", Time = prayerTimes.Asr, Icon = "🌤️" },
-        new PrayerItem { Name = "Maghrib", Time = prayerTimes.Maghrib, Icon = "🌇" },
-        new PrayerItem { Name = "Isha", Time = prayerTimes.Isha, Icon = "🌙" }
-    };
-}
-    private class PrayerItem
-{
-    public string Name { get; set; } = "";
-    public string Time { get; set; } = "";
-    public string Icon { get; set; } = "";
-}
     private string searchCity = "";
 
     private List<string> FilteredCities => pakistanCities
         .Where(c => c.Contains(searchCity, StringComparison.OrdinalIgnoreCase))
         .ToList();
+
+    private class PrayerItem
+    {
+        public string Name { get; set; } = "";
+        public string Time { get; set; } = "";
+        public string Icon { get; set; } = "";
+    }
+
+    private string FormatTime(string time24)
+    {
+        if (TimeSpan.TryParse(time24, out var t))
+        {
+            var dt = DateTime.Today.Add(t);
+            return dt.ToString("h:mm tt");
+        }
+        return time24;
+    }
+
+    private List<PrayerItem> GetPrayers()
+    {
+        if (prayerTimes == null) return new();
+        return new List<PrayerItem>
+        {
+            new PrayerItem { Name = "Fajr", Time = FormatTime(prayerTimes.Fajr), Icon = "🌙" },
+            new PrayerItem { Name = "Sunrise", Time = FormatTime(prayerTimes.Sunrise), Icon = "🌅" },
+            new PrayerItem { Name = "Dhuhr", Time = FormatTime(prayerTimes.Dhuhr), Icon = "☀️" },
+            new PrayerItem { Name = "Asr", Time = FormatTime(prayerTimes.Asr), Icon = "🌤️" },
+            new PrayerItem { Name = "Maghrib", Time = FormatTime(prayerTimes.Maghrib), Icon = "🌇" },
+            new PrayerItem { Name = "Isha", Time = FormatTime(prayerTimes.Isha), Icon = "🌙" }
+        };
+    }
 
     protected override Task OnInitializedAsync()
     {
