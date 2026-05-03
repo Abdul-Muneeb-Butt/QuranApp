@@ -53,6 +53,9 @@
     private double qiblaDirection = 0;
     private bool isLoading = false;
     private bool hasError = false;
+    private double deviceHeading = 0;
+    private double needleRotation = 0;
+    private bool isAligned = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
