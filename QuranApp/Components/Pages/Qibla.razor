@@ -7,3 +7,45 @@
     <div style="background:#2e7d52; padding:15px 20px;">
         <h2 style="color:white; margin:0; font-size:20px;">🧭 Qibla Finder</h2>
     </div>
+    @if (isLoading)
+    {
+        <p style="color:white; margin-top:50px; font-size:18px;">
+            Getting your location...
+        </p>
+    }
+    else if (hasError)
+    {
+        <p style="color:#ffeb3b; margin-top:50px; font-size:16px;">
+            Could not get location. Please allow location access.
+        </p>
+        <button @onclick="GetQibla"
+                style="background:white; color:#2e7d52; border:none;
+            padding:10px 25px; border-radius:5px; font-size:16px;
+            cursor:pointer; margin-top:15px;">
+            Try Again
+        </button>
+    }
+    else if (qiblaDirection > 0)
+    {
+        <div style="margin-top:30px; position:relative; display:inline-block;">
+            <img src="/images/compass.png"
+                 style="width:300px; height:300px;" />
+            <div style="position:absolute; top:50%; left:50%;
+                transform:translate(-50%, -50%) rotate(@(qiblaDirection)deg);
+                font-size:60px; transition: transform 1s ease;">
+                ▲
+            </div>
+            <img src="/images/kaaba.png"
+                 style="position:absolute; bottom:-20px; right:-20px;
+            width:60px; height:60px;" />
+        </div>
+
+        <div style="color:white; font-size:24px; margin-top:40px;">
+            Qibla: <span style="color:#f4c430; font-weight:bold;">@qiblaDirection.ToString("F1")°</span>
+        </div>
+
+        <div style="color:#b2dfdb; font-size:13px; margin-top:15px; padding:0 30px;">
+            ⚠ Please keep your device horizontal for accurate reading
+        </div>
+    }
+</div>
