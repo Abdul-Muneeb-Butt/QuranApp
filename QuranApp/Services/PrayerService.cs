@@ -41,7 +41,10 @@ namespace QuranApp.Services
     {
         public HijriData? Data { get; set; }
     }
-
+    public class HijriData
+    {
+        public HijriDate? Date { get; set; }
+    }
 
 }
 
