@@ -54,4 +54,11 @@
     private bool isLoading = false;
     private bool hasError = false;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetQibla();
+        }
+    }
 }
