@@ -1,4 +1,5 @@
-﻿namespace QuranApp.Services
+﻿using System.Net.Http.Json;
+namespace QuranApp.Services
 {
     public class QiblaService
     {
