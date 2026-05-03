@@ -23,7 +23,7 @@ namespace QuranApp.Services
         {
             var response = await _http.GetFromJsonAsync<HijriApiResponse>
             ($"http://api.aladhan.com/v1/gToH?date={DateTime.Now:dd-MM-yyyy}");
-            return response?.Data?.Date;
+            return response?.Data?.Hijri;
         }
     }
     public class PrayerApiResponse
@@ -49,7 +49,7 @@ namespace QuranApp.Services
     }
     public class HijriData
     {
-        public HijriInfo? Date { get; set; }
+        public HijriInfo? Hijri { get; set; }
     }
 
     public class HijriInfo
