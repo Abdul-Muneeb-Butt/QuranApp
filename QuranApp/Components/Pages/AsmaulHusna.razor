@@ -34,3 +34,18 @@
         </div>
     }
 </div>
+@code {
+    private class AllahName
+    {
+        public int Number { get; set; }
+        public string English { get; set; } = "";
+        public string Arabic { get; set; } = "";
+        public string Meaning { get; set; } = "";
+    }
+
+    private List<AllahName> AllahNames = new()
+    {
+        new AllahName { Number = 1, English = "Ar-Rahman", Arabic = "الرَّحْمَنُ", Meaning = "The Exceedingly Compassionate, The Exceedingly Beneficent" },
+        // Qasim add remaining 98 names here same pattern
+    };
+}
