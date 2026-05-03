@@ -9,27 +9,52 @@
     <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["QuranApp.styles.css"]" />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
     <ImportMap />
     <link rel="icon" type="image/png" href="favicon.png" />
     <HeadOutlet />
 </head>
+
 <body>
     <Routes />
     <ReconnectModal />
-
+    <script src="@Assets["_framework/blazor.web.js"]"></script>
     <script>
-            window.playAudioAndWait = (dotNetRef, audioUrl) => {
-                const audio = document.getElementById('quranAudio');
-                audio.src = audioUrl;
-                audio.play();
-                audio.onended = () => {
-                    dotNetRef.invokeMethodAsync('OnAyahFinished');
-                };
-            };
-    </script>
-    <script src="@Assets["_framework/blazor.web.js"]">
-        
-    
+        window.playAudioAndWait = (dotNetRef, audioUrl) => {
+        const audio = document.getElementById('quranAudio');
+        audio.src = audioUrl;
+        audio.play();
+        audio.onended = () => {
+        dotNetRef.invokeMethodAsync('OnAyahFinished');
+        };
+        };
+        window.getLocation = (dotNetRef) => {
+        if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+        (position) => {
+        dotNetRef.invokeMethodAsync('OnLocationReceived',
+        position.coords.latitude,
+        position.coords.longitude);
+        },
+        (error) => {
+        dotNetRef.invokeMethodAsync('OnLocationError');
+        }
+        );
+        } else {
+        dotNetRef.invokeMethodAsync('OnLocationError');
+        }
+        };
+        window.startCompass = (dotNetRef) => {
+        window.addEventListener('deviceorientationabsolute', (event) => {
+        let heading = event.alpha;
+        dotNetRef.invokeMethodAsync('OnDeviceRotated', heading);
+        }, true);
+
+        window.addEventListener('deviceorientation', (event) => {
+        let heading = event.alpha;
+        dotNetRef.invokeMethodAsync('OnDeviceRotated', heading);
+        }, true);
+        };
     </script>
 </body>
 

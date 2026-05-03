@@ -3,10 +3,11 @@
 @inject IJSRuntime JS
 @rendermode InteractiveServer
 
-<div style="background:#2e7d52; min-height:100vh; text-align:center; padding:20px;">
+<div style="background: linear-gradient(135deg, #1B6B3A, #2e7d52, #52b788);
+    min-height:100vh; text-align:center; padding:20px;">
 
     <div style="padding:15px 20px;">
-        <h2 style="color:white; margin:0; font-size:20px;">🧭 Qibla Finder</h2>
+        <h2 style="color:white; margin:0; font-size:24px;">🧭 Qibla Finder</h2>
     </div>
 
     @if (isLoading)
@@ -29,48 +30,129 @@
     }
     else if (qiblaDirection > 0)
     {
-        @if (isAligned)
-        {
-            <div style="width:15px; height:15px; border-radius:50%;
-                background:#f4c430; margin:0 auto 10px auto;
-                box-shadow:0 0 15px #f4c430;
-                animation:blink 0.5s infinite;">
-            </div>
+        <div style="color:white; font-size:15px; margin-bottom:20px;">
+            @if (isMobile)
+            {
+                <span>Rotate your device to align with Kaaba 🕋</span>
+            }
+            else
+            {
+                <span>
+                    Face <b style="color:#f4c430;">
+                    @qiblaDirection.ToString("F1")°
+                </b> direction for Qibla 🕋
+            </span>
         }
-        else
-        {
-            <div style="width:15px; height:15px; border-radius:50%;
-                background:white; margin:0 auto 10px auto;">
-            </div>
-        }
+    </div>
 
-        <div style="margin-top:10px; position:relative; display:inline-block;">
+    @* CSS Compass *@
+    <div style="margin-top:30px; position:relative;
+        display:inline-block; width:300px; height:300px;">
 
-            <img src="/images/compass.png"
-                 style="width:300px; height:300px;" />
-
-            <div style="position:absolute; top:50%; left:50%;
-                transform:translate(-50%, -50%) rotate(@(needleRotation)deg);
-                font-size:60px; color:#f4c430;
-                transition: transform 0.3s ease;">
-                ▲
-            </div>
-
-            <img src="/images/kaaba.png"
-                 style="position:absolute; bottom:-20px; right:-20px;
-            width:60px; height:60px;
-            @(isAligned ? "filter:drop-shadow(0 0 10px yellow);" : "")" />
+        @* Outer compass ring *@
+        <div style="width:300px; height:300px; border-radius:50%;
+            background: conic-gradient(#1a3a2a, #2e7d52,
+            #1a3a2a, #2e7d52, #1a3a2a);
+            position:absolute; top:0; left:0;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5),
+            inset 0 0 20px rgba(0,0,0,0.3);">
         </div>
 
-        <div style="color:white; font-size:24px; margin-top:40px;">
-            Qibla: <span style="color:#f4c430; font-weight:bold;">
+        @* Inner compass face *@
+        <div style="width:260px; height:260px; border-radius:50%;
+            background: radial-gradient(circle, #1c1c1c, #2d2d2d);
+            position:absolute; top:20px; left:20px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);">
+        </div>
+
+        @* N S E W labels *@
+        <div style="position:absolute; top:25px; left:50%;
+            transform:translateX(-50%);
+            color:#f4c430; font-size:18px;
+            font-weight:bold; z-index:10;">
+            N
+        </div>
+        <div style="position:absolute; bottom:25px; left:50%;
+            transform:translateX(-50%);
+            color:white; font-size:18px;
+            font-weight:bold; z-index:10;">
+            S
+        </div>
+        <div style="position:absolute; right:25px; top:50%;
+            transform:translateY(-50%);
+            color:white; font-size:18px;
+            font-weight:bold; z-index:10;">
+            E
+        </div>
+        <div style="position:absolute; left:25px; top:50%;
+            transform:translateY(-50%);
+            color:white; font-size:18px;
+            font-weight:bold; z-index:10;">
+            W
+        </div>
+
+        @* Needle - rotates to Qibla direction *@
+        <div style="position:absolute; top:50%; left:50%;
+            width:8px; height:130px;
+            transform:translate(-50%, -100%)
+            rotate(@(isMobile ? needleRotation : qiblaDirection)deg);
+            transform-origin: bottom center;
+            transition: transform 0.3s ease;
+            z-index:20;">
+
+            @* Top part - points to Qibla *@
+            <div style="width:8px; height:80px;
+                background: linear-gradient(to top, #f4c430, #ff9800);
+                border-radius:4px 4px 0 0;
+                position:relative;">
+                <div style="position:absolute; top:-25px; left:50%;
+                    transform:translateX(-50%);
+                    font-size:20px;">
+                    🕋
+                </div>
+            </div>
+
+            @* Bottom part - points opposite *@
+            <div style="width:8px; height:50px;
+                background: linear-gradient(to bottom, #e53935, #b71c1c);
+                border-radius:0 0 4px 4px;">
+            </div>
+        </div>
+
+        @* Center dot *@
+        <div style="position:absolute; top:50%; left:50%;
+            transform:translate(-50%, -50%);
+            width:16px; height:16px; border-radius:50%;
+            background:#f4c430;
+            box-shadow: 0 0 8px #f4c430;
+            z-index:30;">
+        </div>
+
+    </div>
+
+    <div style="color:white; font-size:22px; margin-top:40px;">
+        Qibla Direction:
+        <span style="color:#f4c430; font-weight:bold;">
             @qiblaDirection.ToString("F1")°
         </span>
     </div>
 
-    <div style="color:#b2dfdb; font-size:13px; margin-top:15px; padding:0 30px;">
-        ⚠ Please keep your device horizontal for accurate reading
-    </div>
+    @if (isMobile)
+    {
+        <div style="color:#b2dfdb; font-size:13px;
+            margin-top:10px; padding:0 30px;">
+            ⚠ Keep device horizontal for accurate reading
+        </div>
+    }
+    else
+    {
+        <div style="background:rgba(0,0,0,0.2); border-radius:10px;
+            padding:15px; margin:15px 30px;
+            color:white; font-size:14px;">
+            💻 For live compass rotation please use a mobile device.
+            The Qibla angle shown is accurate for your location.
+        </div>
+    }
 }
 </div>
 
@@ -98,12 +180,15 @@
                 dotNetRef.invokeMethodAsync('OnDeviceRotated', event.alpha);
             }
         }, true);
-
         window.addEventListener('deviceorientation', (event) => {
             if (event.alpha !== null) {
                 dotNetRef.invokeMethodAsync('OnDeviceRotated', event.alpha);
             }
         }, true);
+    };
+
+    window.checkMobile = () => {
+        return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     };
 </script>
 
@@ -114,6 +199,7 @@
     private double deviceHeading = 0;
     private double needleRotation = 0;
     private bool isAligned = false;
+    private bool isMobile = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -121,6 +207,7 @@
         {
             try
             {
+                isMobile = await JS.InvokeAsync<bool>("checkMobile");
                 await Task.Delay(500);
                 var dotNetRef = DotNetObjectReference.Create(this);
                 await JS.InvokeVoidAsync("getLocationQibla", dotNetRef);
@@ -149,7 +236,8 @@
     {
         try
         {
-            qiblaDirection = await QiblaService.GetQiblaDirectionAsync(latitude, longitude);
+            qiblaDirection = await QiblaService
+                .GetQiblaDirectionAsync(latitude, longitude);
         }
         catch
         {
@@ -159,8 +247,11 @@
         isLoading = false;
         StateHasChanged();
 
-        var dotNetRef = DotNetObjectReference.Create(this);
-        await JS.InvokeVoidAsync("startCompass", dotNetRef);
+        if (isMobile)
+        {
+            var dotNetRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("startCompass", dotNetRef);
+        }
     }
 
     [JSInvokable]
