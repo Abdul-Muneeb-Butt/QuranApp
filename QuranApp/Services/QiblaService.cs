@@ -17,5 +17,9 @@ namespace QuranApp.Services
             return response?.Data?.Direction ?? 0;
         }
     }
+    public class QiblaResponse
+    {
+        public QiblaData? Data { get; set; }
+    }
 }
 
