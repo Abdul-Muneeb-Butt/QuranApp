@@ -85,4 +85,11 @@
         isLoading = false;
         StateHasChanged();
     }
+    [JSInvokable]
+    public void OnLocationError()
+    {
+        isLoading = false;
+        hasError = true;
+        StateHasChanged();
+    }
 }
