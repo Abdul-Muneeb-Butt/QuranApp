@@ -10,6 +10,11 @@ namespace QuranApp.Services
         {
             _http = http;
         }
-
+        public async Task<HijriCalendarInfo?> GetHijriCalendarAsync(int month, int year)
+        {
+            var response = await _http.GetFromJsonAsync<HijriCalendarResponse>
+            ($"http://api.aladhan.com/v1/hToGCalendar/{month}/{year}");
+            return response?.Data?.FirstOrDefault();
+        }
     }
 }
