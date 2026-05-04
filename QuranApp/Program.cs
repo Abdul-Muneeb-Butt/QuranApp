@@ -20,6 +20,7 @@ builder.Services.AddHttpClient<QuranService>(client =>
 });
 builder.Services.AddHttpClient<QiblaService>();
 builder.Services.AddHttpClient<PrayerService>();
+builder.Services.AddHttpClient<CalendarService>();
 builder.Services.AddServerSideBlazor();
 var app = builder.Build();
 
