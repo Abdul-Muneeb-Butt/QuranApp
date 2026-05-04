@@ -22,5 +22,11 @@ namespace QuranApp.Services
             ($"http://api.aladhan.com/v1/hToGCalendar/{month}/{year}");
             return response?.Data;
         }
+        public async Task<List<CalendarDay>?> GetGregorianMonthAsync(int month, int year)
+        {
+            var response = await _http.GetFromJsonAsync<HijriMonthResponse>
+            ($"http://api.aladhan.com/v1/gToHCalendar/{month}/{year}");
+            return response?.Data;
+        }
     }
 }
