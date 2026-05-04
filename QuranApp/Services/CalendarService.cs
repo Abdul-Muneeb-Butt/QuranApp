@@ -29,4 +29,9 @@ namespace QuranApp.Services
             return response?.Data;
         }
     }
+    public class GregorianMonth
+    {
+        public int Number { get; set; }
+        public string En { get; set; } = "";
+    }
 }
