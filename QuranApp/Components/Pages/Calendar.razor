@@ -90,3 +90,31 @@
         showHijri = hijri;
         await LoadCalendar();
     }
+    private bool IsToday(QuranApp.Services.CalendarDay day)
+    {
+        if (showHijri)
+            return day.Gregorian?.Day == DateTime.Now.Day.ToString() &&
+                   day.Gregorian?.Month?.Number == DateTime.Now.Month &&
+                   day.Gregorian?.Year == DateTime.Now.Year.ToString();
+        else
+            return day.Gregorian?.Day == DateTime.Now.Day.ToString() &&
+                   day.Gregorian?.Month?.Number == DateTime.Now.Month &&
+                   day.Gregorian?.Year == DateTime.Now.Year.ToString();
+    }
+
+    private string GetMonthTitle()
+    {
+        if (showHijri)
+        {
+            var monthNames = new[] { "", "Muharram", "Safar", "Rabi al-Awwal",
+                "Rabi al-Thani", "Jumada al-Awwal", "Jumada al-Thani",
+                "Rajab", "Sha'ban", "Ramadan", "Shawwal",
+                "Dhu al-Qi'dah", "Dhu al-Hijjah" };
+            return $"{monthNames[currentHijriMonth]} {currentHijriYear} AH";
+        }
+        else
+        {
+            return new DateTime(currentYear, currentMonth, 1).ToString("MMMM yyyy");
+        }
+    }
+}
