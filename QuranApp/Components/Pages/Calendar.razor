@@ -39,3 +39,19 @@
             currentHijriYear = int.TryParse(today.Hijri.Year, out int y) ? y : 1447;
         }
     }
+    private async Task LoadCalendar()
+    {
+        isLoading = true;
+        if (showHijri)
+        {
+            calendarDays = await CalendarService.GetHijriMonthAsync(
+                currentHijriMonth, currentHijriYear);
+        }
+        else
+        {
+            calendarDays = await CalendarService.GetGregorianMonthAsync(
+                currentMonth, currentYear);
+        }
+        isLoading = false;
+    }
+
