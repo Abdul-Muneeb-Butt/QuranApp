@@ -55,3 +55,38 @@
         isLoading = false;
     }
 
+    private async Task PreviousMonth()
+    {
+        if (showHijri)
+        {
+            currentHijriMonth--;
+            if (currentHijriMonth < 1) { currentHijriMonth = 12; currentHijriYear--; }
+        }
+        else
+        {
+            currentMonth--;
+            if (currentMonth < 1) { currentMonth = 12; currentYear--; }
+        }
+        await LoadCalendar();
+    }
+
+    private async Task NextMonth()
+    {
+        if (showHijri)
+        {
+            currentHijriMonth++;
+            if (currentHijriMonth > 12) { currentHijriMonth = 1; currentHijriYear++; }
+        }
+        else
+        {
+            currentMonth++;
+            if (currentMonth > 12) { currentMonth = 1; currentYear++; }
+        }
+        await LoadCalendar();
+    }
+
+    private async Task SwitchTab(bool hijri)
+    {
+        showHijri = hijri;
+        await LoadCalendar();
+    }
