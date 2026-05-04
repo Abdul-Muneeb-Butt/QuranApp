@@ -43,4 +43,10 @@ namespace QuranApp.Services
         public HijriWeekday? Weekday { get; set; }
         public List<string>? Holidays { get; set; }
     }
+    public class HijriMonth
+    {
+        public int Number { get; set; }
+        public string En { get; set; } = "";
+        public string Ar { get; set; } = "";
+    }
 }
