@@ -1,4 +1,13 @@
 ﻿@page "/calendar"
 @inject QuranApp.Services.CalendarService CalendarService
 @rendermode InteractiveServer
-<h1>Calendar</h1>
+
+
+@code {
+    private bool showHijri = true;
+    private int currentMonth = DateTime.Now.Month;
+    private int currentYear = DateTime.Now.Year;
+    private int currentHijriMonth = 0;
+    private int currentHijriYear = 0;
+    private List<QuranApp.Services.CalendarDay>? calendarDays;
+    private bool isLoading = false;
