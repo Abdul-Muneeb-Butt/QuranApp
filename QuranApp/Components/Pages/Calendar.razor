@@ -27,3 +27,15 @@
         await LoadCurrentHijriDate();
         await LoadCalendar();
     }
+    private async Task LoadCurrentHijriDate()
+    {
+        var days = await CalendarService.GetGregorianMonthAsync(
+            DateTime.Now.Month, DateTime.Now.Year);
+        var today = days?.FirstOrDefault(d =>
+            d.Gregorian?.Day == DateTime.Now.Day.ToString());
+        if (today?.Hijri != null)
+        {
+            currentHijriMonth = today.Hijri.Month?.Number ?? 1;
+            currentHijriYear = int.TryParse(today.Hijri.Year, out int y) ? y : 1447;
+        }
+    }
