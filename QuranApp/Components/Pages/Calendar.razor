@@ -11,3 +11,14 @@
     private int currentHijriYear = 0;
     private List<QuranApp.Services.CalendarDay>? calendarDays;
     private bool isLoading = false;
+
+    private List<(string Name, string HijriDate, string GregorianDate)> islamicEvents = new()
+    {
+        ("Hajj", "12/8/1447H", "5/25/2026"),
+        ("Eid al-Adha", "12/10/1447H", "5/27/2026"),
+        ("Al-Hijira", "1/1/1448H", "6/16/2026"),
+        ("Ashura", "1/10/1448H", "6/25/2026"),
+        ("Eid Milad un Nabi", "3/12/1448H", "9/4/2026"),
+        ("Ramadan Start", "1/1/1449H", "3/17/2027"),
+        ("Eid ul Fitr", "1/10/1449H", "3/27/2027"),
+    };
