@@ -1,66 +1,99 @@
 ﻿@page "/"
-
 @rendermode InteractiveServer
+@inject QuranApp.Services.PrayerService PrayerService
+@inject IJSRuntime JS
+@using System.Timers
 
 <PageTitle>Al-Quran App</PageTitle>
 
-@* Top Navigation Bar *@
-<div style="position:fixed; bottom:0; left:0; right:0;
-            background:white; border-top:1px solid #e0e0e0;
-            display:flex; justify-content:space-around;
-            padding:8px 0; z-index:1000;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
-    <a href="/" style="text-decoration:none; text-align:center; color:#2e7d52;">
-        <div style="font-size:24px;">🕌</div>
-        <div style="font-size:11px; font-weight:bold; color:#2e7d52;">Home</div>
+@* Hero Banner *@
+<div style="background-image: url('/images/m2.jpg');
+    background-size:cover; background-position:center;
+    padding:20px; color:white; position:relative;
+    min-height:200px;">
 
-    </a>
-    <a href="/quran" style="text-decoration:none; text-align:center; color:#888;">
-        <div style="font-size:24px;">📖</div>
-        <div style="font-size:11px; color:#888;">Quran</div>
-    </a>
-    <a href="/prayer" style="text-decoration:none; text-align:center; color:#888;">
-        <div style="font-size:24px;">🕐</div>
-        <div style="font-size:11px; color:#888;">Prayer</div>
-    </a>
-    <a href="/qibla" style="text-decoration:none; text-align:center; color:#888;">
-        <div style="font-size:24px;">🧭</div>
-        <div style="font-size:11px; color:#888;">Qibla</div>
-    </a>
-    <a href="/bookmarks" style="text-decoration:none; text-align:center; color:#888;">
-        <div style="font-size:24px;">👤</div>
-        <div style="font-size:11px; color:#888;">Mine</div>
-    </a>
+    @* Dark overlay *@
+    <div style="position:absolute; top:0; left:0; right:0; bottom:0;
+    background:rgba(0,80,40,0.6); z-index:0;"></div>
+
+    @* Content *@
+    <div style="position:relative; z-index:1;">
+
+        @* Top row *@
+        <div style="display:flex; justify-content:space-between;
+            align-items:center; margin-bottom:10px;">
+
+            @* City Selector *@
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span>📍</span>
+                <select @onchange="ChangeCity"
+                        style="background:transparent; color:white;
+                    border:none; font-size:16px; font-weight:bold;
+                    cursor:pointer; outline:none;">
+                    <option value="Islamabad" style="color:black;">Islamabad</option>
+                    <option value="Karachi" style="color:black;">Karachi</option>
+                    <option value="Lahore" style="color:black;">Lahore</option>
+                    <option value="Peshawar" style="color:black;">Peshawar</option>
+                    <option value="Quetta" style="color:black;">Quetta</option>
+                    <option value="Multan" style="color:black;">Multan</option>
+                    <option value="Faisalabad" style="color:black;">Faisalabad</option>
+                    <option value="Rawalpindi" style="color:black;">Rawalpindi</option>
+                    <option value="Kharian" style="color:black;">Kharian</option>
+                    <option value="Gujranwala" style="color:black;">Gujranwala</option>
+                    <option value="Sialkot" style="color:black;">Sialkot</option>
+                    <option value="Dubai" style="color:black;">Dubai</option>
+                    <option value="London" style="color:black;">London</option>
+                    <option value="New York" style="color:black;">New York</option>
+                </select>
+            </div>
+
+            @* Date *@
+            <div style="text-align:right; font-size:13px; color:#b2dfdb;">
+                @DateTime.Now.ToString("dddd M/d/yyyy")<br />
+                @if (hijriDate != null)
+                {
+                    <span>@hijriDate.Day @hijriDate.Month?.En @hijriDate.Year AH</span>
+                }
+            </div>
+        </div>
+
+        @* Current Prayer *@
+        @if (prayerTimes != null)
+        {
+            <div style="font-size:28px; font-weight:bold; color:#f4c430;">
+                @currentPrayer
+            </div>
+            <div style="display:flex; align-items:baseline; gap:15px;">
+                <div style="font-size:42px; font-weight:bold;">
+                    @nextPrayerTime
+                </div>
+                <div style="font-size:16px; color:#b2dfdb;">
+                    (@countdown)
+                </div>
+            </div>
+        }
+        else
+        {
+            <div style="font-size:20px; color:#b2dfdb;">
+                Loading prayer times...
+            </div>
+        }
+    </div>
 </div>
 
-<div style="background: linear-gradient(135deg, #1a3a2a, #2e7d52);
-    padding:20px; color:white; position:relative; overflow:hidden;">
-    <div style="font-size:13px; color:#b2dfdb; margin-bottom:5px;">
-        📍 Your Location
-    </div>
-    <div style="font-size:28px; font-weight:bold; color:#f4c430;">
-        Al-Quran App
-    </div>
-    <div style="font-size:14px; color:#b2dfdb; margin-top:5px;">
-        @DateTime.Now.ToString("dddd M/d/yyyy")
-    </div>
-    <div style="font-size:13px; color:#b2dfdb;">
-        Your complete Islamic companion
-    </div>
-</div>
-<div style="padding:20px; background:#f5f5f5; min-height:100vh; padding-bottom:80px;">
-
+@* Feature Grid *@
+<div style="padding:20px; background:#f5f5f5; min-height:60vh; padding-bottom:80px;">
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr;
-                gap:15px; margin-bottom:20px;">
+        gap:15px; margin-bottom:20px;">
 
-        @* Quran *@
         <a href="/quran" style="text-decoration:none; text-align:center;">
             <div style="background:white; border-radius:12px; padding:15px 5px;
-                        box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                box-shadow:0 2px 8px rgba(0,0,0,0.1);">
                 <div style="font-size:35px;">📖</div>
                 <div style="font-size:12px; color:#333; margin-top:5px; font-weight:500;">Quran</div>
             </div>
         </a>
+
         <a href="/hadith" style="text-decoration:none; text-align:center;">
             <div style="background:white; border-radius:12px; padding:15px 5px;
                 box-shadow:0 2px 8px rgba(0,0,0,0.1);">
@@ -68,6 +101,7 @@
                 <div style="font-size:12px; color:#333; margin-top:5px; font-weight:500;">Hadith</div>
             </div>
         </a>
+
         <a href="/tasbih" style="text-decoration:none; text-align:center;">
             <div style="background:white; border-radius:12px; padding:15px 5px;
                 box-shadow:0 2px 8px rgba(0,0,0,0.1);">
@@ -75,6 +109,7 @@
                 <div style="font-size:12px; color:#333; margin-top:5px; font-weight:500;">Tasbih</div>
             </div>
         </a>
+
         <a href="/asmaul" style="text-decoration:none; text-align:center;">
             <div style="background:white; border-radius:12px; padding:15px 5px;
                 box-shadow:0 2px 8px rgba(0,0,0,0.1);">
@@ -82,6 +117,15 @@
                 <div style="font-size:12px; color:#333; margin-top:5px; font-weight:500;">99 Names</div>
             </div>
         </a>
+
+        <a href="/prayer" style="text-decoration:none; text-align:center;">
+            <div style="background:white; border-radius:12px; padding:15px 5px;
+                box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <div style="font-size:35px;">🕐</div>
+                <div style="font-size:12px; color:#333; margin-top:5px; font-weight:500;">Prayer</div>
+            </div>
+        </a>
+
         <a href="/qibla" style="text-decoration:none; text-align:center;">
             <div style="background:white; border-radius:12px; padding:15px 5px;
                 box-shadow:0 2px 8px rgba(0,0,0,0.1);">
@@ -89,6 +133,7 @@
                 <div style="font-size:12px; color:#333; margin-top:5px; font-weight:500;">Qibla</div>
             </div>
         </a>
+
         <a href="/calendar" style="text-decoration:none; text-align:center;">
             <div style="background:white; border-radius:12px; padding:15px 5px;
                 box-shadow:0 2px 8px rgba(0,0,0,0.1);">
@@ -96,6 +141,7 @@
                 <div style="font-size:12px; color:#333; margin-top:5px; font-weight:500;">Calendar</div>
             </div>
         </a>
+
         <a href="/bookmarks" style="text-decoration:none; text-align:center;">
             <div style="background:white; border-radius:12px; padding:15px 5px;
                 box-shadow:0 2px 8px rgba(0,0,0,0.1);">
@@ -106,3 +152,119 @@
 
     </div>
 </div>
+
+@* Bottom Navigation *@
+<div style="position:fixed; bottom:0; left:0; right:0;
+    background:white; border-top:1px solid #e0e0e0;
+    display:flex; justify-content:space-around;
+    padding:8px 0; z-index:1000;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
+    <a href="/" style="text-decoration:none; text-align:center;">
+        <div style="font-size:24px;">🕌</div>
+        <div style="font-size:11px; font-weight:bold; color:#2e7d52;">Home</div>
+    </a>
+    <a href="/quran" style="text-decoration:none; text-align:center;">
+        <div style="font-size:24px;">📖</div>
+        <div style="font-size:11px; color:#888;">Quran</div>
+    </a>
+    <a href="/prayer" style="text-decoration:none; text-align:center;">
+        <div style="font-size:24px;">🕐</div>
+        <div style="font-size:11px; color:#888;">Prayer</div>
+    </a>
+    <a href="/qibla" style="text-decoration:none; text-align:center;">
+        <div style="font-size:24px;">🧭</div>
+        <div style="font-size:11px; color:#888;">Qibla</div>
+    </a>
+    <a href="/bookmarks" style="text-decoration:none; text-align:center;">
+        <div style="font-size:24px;">👤</div>
+        <div style="font-size:11px; color:#888;">Mine</div>
+    </a>
+</div>
+
+@code {
+    private QuranApp.Services.PrayerTimes? prayerTimes;
+    private QuranApp.Services.PrayerHijriInfo? hijriDate;
+    private string cityName = "Islamabad";
+    private string currentPrayer = "";
+    private string nextPrayerTime = "";
+    private string countdown = "";
+    private Timer? timer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        prayerTimes = await PrayerService
+            .GetPrayerTimesAsync(cityName, "Pakistan");
+        hijriDate = await PrayerService.GetHijriDateAsync();
+        UpdateCurrentPrayer();
+
+        timer = new Timer(1000);
+        timer.Elapsed += (s, e) =>
+        {
+            UpdateCurrentPrayer();
+            InvokeAsync(StateHasChanged);
+        };
+        timer.Start();
+    }
+
+    private async Task ChangeCity(ChangeEventArgs e)
+    {
+        cityName = e.Value?.ToString() ?? "Islamabad";
+        prayerTimes = await PrayerService
+            .GetPrayerTimesAsync(cityName, "Pakistan");
+        UpdateCurrentPrayer();
+        StateHasChanged();
+    }
+
+    private void UpdateCurrentPrayer()
+    {
+        if (prayerTimes == null) return;
+
+        var now = DateTime.Now.TimeOfDay;
+
+        var prayers = new List<(string Name, TimeSpan Time)>
+        {
+            ("Fajr", ParseTime(prayerTimes.Fajr)),
+            ("Dhuhr", ParseTime(prayerTimes.Dhuhr)),
+            ("Asr", ParseTime(prayerTimes.Asr)),
+            ("Maghrib", ParseTime(prayerTimes.Maghrib)),
+            ("Isha", ParseTime(prayerTimes.Isha))
+        };
+
+        var next = prayers[0];
+        foreach (var prayer in prayers)
+        {
+            if (now < prayer.Time)
+            {
+                next = prayer;
+                break;
+            }
+            next = prayers[0];
+        }
+
+        currentPrayer = next.Name;
+        var nextTime = next.Time;
+        if (now > nextTime) nextTime = nextTime.Add(TimeSpan.FromHours(24));
+        var remaining = nextTime - now;
+
+        nextPrayerTime = DateTime.Today.Add(next.Time)
+            .ToString("h:mm tt");
+        countdown = $"{(int)remaining.TotalHours}:" +
+                   $"{remaining.Minutes:D2}:{remaining.Seconds:D2}";
+    }
+
+    private TimeSpan ParseTime(string time)
+    {
+        var parts = time.Split(':');
+        if (parts.Length >= 2 &&
+            int.TryParse(parts[0], out int h) &&
+            int.TryParse(parts[1], out int m))
+            return new TimeSpan(h, m, 0);
+        return TimeSpan.Zero;
+    }
+
+    public void Dispose()
+    {
+        timer?.Stop();
+        timer?.Dispose();
+    }
+}
