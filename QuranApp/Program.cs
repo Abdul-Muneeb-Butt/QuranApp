@@ -1,5 +1,7 @@
 using QuranApp.Components;
 using QuranApp.Services;
+using Microsoft.EntityFrameworkCore;
+using QuranApp.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +23,13 @@ builder.Services.AddHttpClient<QuranService>(client =>
 builder.Services.AddHttpClient<QiblaService>();
 builder.Services.AddHttpClient<PrayerService>();
 builder.Services.AddHttpClient<CalendarService>();
+builder.Services.AddTransient<AuthService>();
+builder.Services.AddSingleton<SessionService>();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration
+    .GetConnectionString("DefaultConnection")),
+    ServiceLifetime.Transient);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

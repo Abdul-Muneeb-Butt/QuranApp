@@ -1,0 +1,108 @@
+﻿@page "/login"
+@inject QuranApp.Services.AuthService AuthService
+@inject QuranApp.Services.SessionService SessionService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<div style="min-height:100vh; background:#f5f5f5;
+    display:flex; align-items:center; justify-content:center;">
+
+    <div style="background:white; border-radius:16px;
+        padding:40px; width:100%; max-width:400px;
+        box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+
+        @* Logo *@
+        <div style="text-align:center; margin-bottom:30px;">
+            <div style="font-size:50px;">🕌</div>
+            <h2 style="color:#2e7d52; margin:10px 0 5px 0;">QuranApp</h2>
+            <p style="color:#888; font-size:14px;">Sign in to continue</p>
+        </div>
+
+        @* Error Message *@
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div style="background:#ffebee; color:#c62828; padding:10px;
+                border-radius:8px; margin-bottom:15px; font-size:14px;">
+                @errorMessage
+            </div>
+        }
+
+        @* Email *@
+        <div style="margin-bottom:15px;">
+            <label style="font-size:14px; color:#555; font-weight:500;">Email</label>
+            <input @bind="email" type="email" placeholder="Enter your email"
+                   style="width:100%; padding:12px; border:1px solid #ddd;
+            border-radius:8px; font-size:15px; margin-top:5px;
+            box-sizing:border-box; outline:none;" />
+        </div>
+
+        @* Password *@
+        <div style="margin-bottom:20px;">
+            <label style="font-size:14px; color:#555; font-weight:500;">Password</label>
+            <input @bind="password" type="password" placeholder="Enter your password"
+                   style="width:100%; padding:12px; border:1px solid #ddd;
+            border-radius:8px; font-size:15px; margin-top:5px;
+            box-sizing:border-box; outline:none;" />
+        </div>
+
+        @* Login Button *@
+        <button @onclick="HandleLogin"
+                style="width:100%; padding:14px; background:#2e7d52;
+            color:white; border:none; border-radius:8px;
+            font-size:16px; font-weight:bold; cursor:pointer;">
+            @if (isLoading)
+            {
+                <span>Signing in...</span>
+            }
+            else
+            {
+                <span>Sign In</span>
+            }
+        </button>
+
+        @* Register Link *@
+        <div style="text-align:center; margin-top:20px; font-size:14px; color:#888;">
+            Don't have an account?
+            <a href="/register" style="color:#2e7d52; font-weight:bold;
+                text-decoration:none;">
+                Register
+            </a>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private string email = "";
+    private string password = "";
+    private string errorMessage = "";
+    private bool isLoading = false;
+
+    private async Task HandleLogin()
+    {
+        if (string.IsNullOrWhiteSpace(email) ||
+            string.IsNullOrWhiteSpace(password))
+        {
+            errorMessage = "Please enter email and password.";
+            return;
+        }
+
+        isLoading = true;
+        errorMessage = "";
+        StateHasChanged();
+
+        var user = await AuthService.LoginAsync(email, password);
+
+        if (user != null)
+        {
+            SessionService.Login(user);
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            errorMessage = "Invalid email or password.";
+        }
+
+        isLoading = false;
+    }
+}
