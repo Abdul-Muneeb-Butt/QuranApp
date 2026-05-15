@@ -2,7 +2,7 @@ using QuranApp.Components;
 using QuranApp.Services;
 using Microsoft.EntityFrameworkCore;
 using QuranApp.Models;
-
+using Blazored.LocalStorage;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -25,6 +25,7 @@ builder.Services.AddHttpClient<PrayerService>();
 builder.Services.AddHttpClient<CalendarService>();
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddSingleton<SessionService>();
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration

@@ -2,6 +2,7 @@
 @inject QuranApp.Services.QuranService QuranService
 @inject IJSRuntime JS
 @rendermode InteractiveServer
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <div class="quran-container">
     <div class="quran-header">
@@ -123,8 +124,12 @@
                 {
                     <div style="@(showTranslation ? "border-bottom:1px solid #c8a96e; padding:10px 0; margin-bottom:10px;" : "display:inline;")
                         @(isHighlighted ? "background:#e8f5e9; border-radius:8px; padding:10px;" : "")">
-                        <span class="ayah-text">@ayah.Text</span>
-                        <span class="ayah-number">@ayah.NumberInSurah</span>
+                        <button @onclick="() => BookmarkAyah(ayah.Text, ayah.NumberInSurah)"
+                                style="background:none; border:none;
+                            color:#2e7d52; font-size:18px;
+                            cursor:pointer;">
+                            🔖
+                        </button>
                         @if (showTranslation && translation != null)
                         {
                             <div style="color:#5d4037; font-size:15px; margin-top:5px; direction:ltr; text-align:left;">
@@ -234,5 +239,36 @@
         _ayahFinished?.TrySetResult();
         await JS.InvokeVoidAsync("eval", "document.getElementById('quranAudio').pause()");
         StateHasChanged();
+    }
+    public class BookmarkItem
+    {
+        public string Id { get; set; } = "";
+        public string SurahName { get; set; } = "";
+        public int AyahNumber { get; set; }
+        public string ArabicText { get; set; } = "";
+    }
+    private async Task BookmarkAyah(string arabicText, int ayahNumber)
+    {
+        var bookmarks = await LocalStorage
+            .GetItemAsync<List<BookmarkItem>>("bookmarks")
+            ?? new List<BookmarkItem>();
+
+        var existing = bookmarks.Any(b =>
+            b.SurahName == selectedSurahName &&
+            b.AyahNumber == ayahNumber);
+
+        if (!existing)
+        {
+            bookmarks.Add(new BookmarkItem
+            {
+                Id = Guid.NewGuid().ToString(),
+                SurahName = selectedSurahName,
+                AyahNumber = ayahNumber,
+                ArabicText = arabicText
+            });
+
+            await LocalStorage.SetItemAsync("bookmarks", bookmarks);
+            StateHasChanged();
+        }
     }
 }
