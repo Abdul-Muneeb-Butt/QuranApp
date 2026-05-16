@@ -5,17 +5,19 @@ namespace QuranApp.Services
 {
     public class AuthService
     {
-        private readonly AppDbContext _db;
+        private readonly IDbContextFactory<AppDbContext> _dbFactory;
 
-        public AuthService(AppDbContext db)
+        public AuthService(IDbContextFactory<AppDbContext> dbFactory)
         {
-            _db = db;
+            _dbFactory = dbFactory;
         }
 
         public async Task<bool> RegisterAsync(string fullName,
             string email, string password)
         {
-            var exists = await _db.Users
+            using var db = _dbFactory.CreateDbContext();
+
+            var exists = await db.Users
                 .AnyAsync(u => u.Email == email);
             if (exists) return false;
 
@@ -26,15 +28,17 @@ namespace QuranApp.Services
                 Password = BCrypt.Net.BCrypt.HashPassword(password)
             };
 
-            _db.Users.Add(user);
-            await _db.SaveChangesAsync();
+            db.Users.Add(user);
+            await db.SaveChangesAsync();
             return true;
         }
 
         public async Task<User?> LoginAsync(string email,
             string password)
         {
-            var user = await _db.Users
+            using var db = _dbFactory.CreateDbContext();
+
+            var user = await db.Users
                 .FirstOrDefaultAsync(u => u.Email == email);
             if (user == null) return null;
 

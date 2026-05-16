@@ -3,85 +3,221 @@
 @inject QuranApp.Services.SessionService SessionService
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
+@inject QuranApp.Services.EmailService EmailService
 
-<div style="min-height:100vh; background:#f5f5f5;
-    display:flex; align-items:center; justify-content:center;">
+<div style="display:flex; min-height:100vh;">
 
-    <div style="background:white; border-radius:16px;
-        padding:40px; width:100%; max-width:400px;
-        box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+    @* Left Side — Green with Mosque Image *@
+    <div style="width:45%; background:linear-gradient(135deg, #1a3a2a, #2e7d52, #52b788);
+        display:flex; flex-direction:column; align-items:center;
+        justify-content:center; padding:40px; text-align:center;">
+        <img src="/images/mlogo.png" alt="Mosque Icon" style="width:200px; height:150px; filter:drop-shadow(0 10px 30px rgba(0,0,0,0.3));" />
 
-        @* Logo *@
-        <div style="text-align:center; margin-bottom:30px;">
-            <div style="font-size:50px;">🕌</div>
-            <h2 style="color:#2e7d52; margin:10px 0 5px 0;">QuranApp</h2>
-            <p style="color:#888; font-size:14px;">Sign in to continue</p>
-        </div>
+        <h1 style="color:white; font-size:32px; margin:0 0 15px 0;">
+            QuranApp
+        </h1>
 
-        @* Error Message *@
-        @if (!string.IsNullOrEmpty(errorMessage))
-        {
-            <div style="background:#ffebee; color:#c62828; padding:10px;
-                border-radius:8px; margin-bottom:15px; font-size:14px;">
-                @errorMessage
+        <p style="color:#b2dfdb; font-size:16px; line-height:1.8; max-width:300px;">
+            Your complete Islamic companion. Read Quran, check Prayer Times,
+            find Qibla, and much more — all in one place.
+        </p>
+
+        <p style="color:#f4c430; font-size:22px; margin-top:30px;
+            font-family:'Traditional Arabic', serif;">
+            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+        </p>
+
+    </div>
+
+    @* Right Side — Login Form *@
+    <div style="width:55%; display:flex; align-items:center;
+        justify-content:center; background:white; padding:40px;">
+
+        <div style="width:100%; max-width:420px;">
+
+            @* Tabs *@
+            <div style="display:flex; border-bottom:2px solid #e0e0e0;
+                margin-bottom:30px;">
+                <div @onclick="ShowLogin"
+                     style="padding:12px 25px; cursor:pointer; font-size:16px;
+                    font-weight:bold; border-bottom: @(isLoginTab ? "3px solid #2e7d52" : "none");
+                    color: @(isLoginTab ? "#2e7d52" : "#888");
+                    margin-bottom:-2px;">
+                    Login
+                </div>
+                <div @onclick="ShowRegister"
+                     style="padding:12px 25px; cursor:pointer; font-size:16px;
+                    font-weight:bold; border-bottom: @(!isLoginTab ? "3px solid #2e7d52" : "none");
+                    color: @(!isLoginTab ? "#2e7d52" : "#888");
+                    margin-bottom:-2px;">
+                    Create Account
+                </div>
             </div>
-        }
 
-        @* Email *@
-        <div style="margin-bottom:15px;">
-            <label style="font-size:14px; color:#555; font-weight:500;">Email</label>
-            <input @bind="email" type="email" placeholder="Enter your email"
-                   style="width:100%; padding:12px; border:1px solid #ddd;
-            border-radius:8px; font-size:15px; margin-top:5px;
-            box-sizing:border-box; outline:none;" />
-        </div>
-
-        @* Password *@
-        <div style="margin-bottom:20px;">
-            <label style="font-size:14px; color:#555; font-weight:500;">Password</label>
-            <input @bind="password" type="password" placeholder="Enter your password"
-                   style="width:100%; padding:12px; border:1px solid #ddd;
-            border-radius:8px; font-size:15px; margin-top:5px;
-            box-sizing:border-box; outline:none;" />
-        </div>
-
-        @* Login Button *@
-        <button @onclick="HandleLogin"
-                style="width:100%; padding:14px; background:#2e7d52;
-            color:white; border:none; border-radius:8px;
-            font-size:16px; font-weight:bold; cursor:pointer;">
-            @if (isLoading)
+            @if (isLoginTab)
             {
-                <span>Signing in...</span>
+                @* Login Form *@
+                <h2 style="color:#222; margin:0 0 25px 0; font-size:28px;">
+                    Welcome back!
+                </h2>
+
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div style="background:#ffebee; color:#c62828; padding:12px;
+                        border-radius:8px; margin-bottom:15px; font-size:14px;">
+                        @errorMessage
+                    </div>
+                }
+
+                <div style="margin-bottom:20px;">
+                    <input @bind="loginEmail" type="email"
+                           placeholder="Email"
+                           style="width:100%; padding:14px; border:none;
+                    border-bottom:2px solid #e0e0e0; font-size:15px;
+                    outline:none; box-sizing:border-box;
+                    background:transparent;" />
+                </div>
+
+                <div style="margin-bottom:10px;">
+                    <input @bind="loginPassword" type="password"
+                           placeholder="Password"
+                           style="width:100%; padding:14px; border:none;
+                    border-bottom:2px solid #e0e0e0; font-size:15px;
+                    outline:none; box-sizing:border-box;
+                    background:transparent;" />
+                </div>
+
+                <div style="text-align:right; margin-bottom:25px;">
+                    <span style="color:#888; font-size:13px; cursor:pointer;">
+                        Forgot Password?
+                    </span>
+                </div>
+
+                <button @onclick="HandleLogin"
+                        style="width:100%; padding:15px; background:#2e7d52;
+                    color:white; border:none; border-radius:8px;
+                    font-size:16px; font-weight:bold; cursor:pointer;">
+                    @(isLoading ? "Signing in..." : "Login")
+                </button>
+
+                <p style="text-align:center; margin-top:20px; color:#888; font-size:14px;">
+                    Don't have an account?
+                    <span @onclick="ShowRegister"
+                          style="color:#2e7d52; font-weight:bold; cursor:pointer;">
+                        Create Account
+                    </span>
+                </p>
             }
             else
             {
-                <span>Sign In</span>
+                @* Register Form *@
+                <h2 style="color:#222; margin:0 0 25px 0; font-size:28px;">
+                    Welcome! Let's get you started!
+                </h2>
+
+                @if (!string.IsNullOrEmpty(successMessage))
+                {
+                    <div style="background:#e8f5e9; color:#2e7d52; padding:12px;
+                        border-radius:8px; margin-bottom:15px; font-size:14px;">
+                        @successMessage
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div style="background:#ffebee; color:#c62828; padding:12px;
+                        border-radius:8px; margin-bottom:15px; font-size:14px;">
+                        @errorMessage
+                    </div>
+                }
+
+                <div style="margin-bottom:20px;">
+                    <input @bind="fullName" type="text"
+                           placeholder="Full Name"
+                           style="width:100%; padding:14px; border:none;
+                    border-bottom:2px solid #e0e0e0; font-size:15px;
+                    outline:none; box-sizing:border-box;
+                    background:transparent;" />
+                </div>
+
+                <div style="margin-bottom:20px;">
+                    <input @bind="registerEmail" type="email"
+                           placeholder="Email"
+                           style="width:100%; padding:14px; border:none;
+                    border-bottom:2px solid #e0e0e0; font-size:15px;
+                    outline:none; box-sizing:border-box;
+                    background:transparent;" />
+                </div>
+
+                <div style="margin-bottom:20px;">
+                    <input @bind="registerPassword" type="password"
+                           placeholder="Password"
+                           style="width:100%; padding:14px; border:none;
+                    border-bottom:2px solid #e0e0e0; font-size:15px;
+                    outline:none; box-sizing:border-box;
+                    background:transparent;" />
+                </div>
+
+                <div style="margin-bottom:25px;">
+                    <input @bind="confirmPassword" type="password"
+                           placeholder="Confirm Password"
+                           style="width:100%; padding:14px; border:none;
+                    border-bottom:2px solid #e0e0e0; font-size:15px;
+                    outline:none; box-sizing:border-box;
+                    background:transparent;" />
+                </div>
+
+                <button @onclick="HandleRegister"
+                        style="width:100%; padding:15px; background:#2e7d52;
+                    color:white; border:none; border-radius:8px;
+                    font-size:16px; font-weight:bold; cursor:pointer;">
+                    @(isLoading ? "Creating account..." : "Create Account")
+                </button>
+
+                <p style="text-align:center; margin-top:20px; color:#888; font-size:14px;">
+                    Already have an account?
+                    <span @onclick="ShowLogin"
+                          style="color:#2e7d52; font-weight:bold; cursor:pointer;">
+                        Login
+                    </span>
+                </p>
             }
-        </button>
-
-        @* Register Link *@
-        <div style="text-align:center; margin-top:20px; font-size:14px; color:#888;">
-            Don't have an account?
-            <a href="/register" style="color:#2e7d52; font-weight:bold;
-                text-decoration:none;">
-                Register
-            </a>
         </div>
-
     </div>
 </div>
 
 @code {
-    private string email = "";
-    private string password = "";
-    private string errorMessage = "";
+    private bool isLoginTab = true;
     private bool isLoading = false;
+    private string errorMessage = "";
+    private string successMessage = "";
+
+    private string loginEmail = "";
+    private string loginPassword = "";
+
+    private string fullName = "";
+    private string registerEmail = "";
+    private string registerPassword = "";
+    private string confirmPassword = "";
+
+    private void ShowLogin()
+    {
+        isLoginTab = true;
+        errorMessage = "";
+        successMessage = "";
+    }
+
+    private void ShowRegister()
+    {
+        isLoginTab = false;
+        errorMessage = "";
+        successMessage = "";
+    }
 
     private async Task HandleLogin()
     {
-        if (string.IsNullOrWhiteSpace(email) ||
-            string.IsNullOrWhiteSpace(password))
+        if (string.IsNullOrWhiteSpace(loginEmail) ||
+            string.IsNullOrWhiteSpace(loginPassword))
         {
             errorMessage = "Please enter email and password.";
             return;
@@ -91,7 +227,7 @@
         errorMessage = "";
         StateHasChanged();
 
-        var user = await AuthService.LoginAsync(email, password);
+        var user = await AuthService.LoginAsync(loginEmail, loginPassword);
 
         if (user != null)
         {
@@ -101,6 +237,56 @@
         else
         {
             errorMessage = "Invalid email or password.";
+        }
+
+        isLoading = false;
+    }
+
+    private async Task HandleRegister()
+    {
+        if (string.IsNullOrWhiteSpace(fullName) ||
+            string.IsNullOrWhiteSpace(registerEmail) ||
+            string.IsNullOrWhiteSpace(registerPassword))
+        {
+            errorMessage = "Please fill all fields.";
+            return;
+        }
+
+        if (registerPassword != confirmPassword)
+        {
+            errorMessage = "Passwords do not match.";
+            return;
+        }
+
+        if (registerPassword.Length < 6)
+        {
+            errorMessage = "Password must be at least 6 characters.";
+            return;
+        }
+
+        isLoading = true;
+        errorMessage = "";
+        StateHasChanged();
+
+        var success = await AuthService.RegisterAsync(
+            fullName, registerEmail, registerPassword);
+
+        if (success)
+        {
+            try
+            {
+                await EmailService.SendWelcomeEmailAsync(registerEmail, fullName);
+            }
+            catch { }
+
+            successMessage = "Account created! Check your email. Redirecting to login...";
+            StateHasChanged();
+            await Task.Delay(2000);
+            ShowLogin();
+        }
+        else
+        {
+            errorMessage = "Email already exists. Please use another email.";
         }
 
         isLoading = false;

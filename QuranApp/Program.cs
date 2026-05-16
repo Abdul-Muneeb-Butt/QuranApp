@@ -23,14 +23,14 @@ builder.Services.AddHttpClient<QuranService>(client =>
 builder.Services.AddHttpClient<QiblaService>();
 builder.Services.AddHttpClient<PrayerService>();
 builder.Services.AddHttpClient<CalendarService>();
-builder.Services.AddTransient<AuthService>();
+builder.Services.AddScoped<AuthService>();
 builder.Services.AddSingleton<SessionService>();
+builder.Services.AddScoped<EmailService>();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContextFactory<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration
-    .GetConnectionString("DefaultConnection")),
-    ServiceLifetime.Transient);
+    .GetConnectionString("DefaultConnection")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
