@@ -28,7 +28,9 @@ builder.Services.AddSingleton<SessionService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddServerSideBlazor();
-
+builder.Services.AddDbContextFactory<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration
+    .GetConnectionString("DefaultConnection")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
