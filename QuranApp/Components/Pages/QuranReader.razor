@@ -89,11 +89,14 @@
 
                 if (ayah.NumberInSurah == 1)
                 {
-                    <div style="text-align:center; font-size:28px;
+                    if (selectedSurah != 9)
+                    {
+                        <div style="text-align:center; font-size:28px;
                         color:#2e7d52; margin-bottom:25px;
                         direction:rtl;">
-                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-                    </div>
+                            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                        </div>
+                    }
                     @if (selectedSurah == 1)
                     {
                         <div style="@(showTranslation ? "border-bottom:1px solid #c8a96e; padding:10px 0; margin-bottom:10px;" : "display:inline;")

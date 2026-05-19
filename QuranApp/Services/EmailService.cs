@@ -267,7 +267,7 @@ namespace QuranApp.Services
                 <div style='text-align:center;
                             margin-top:40px;'>
 
-                    <a href='#'
+                    <a href='https://quranapp-production-759b.up.railway.app/'
                        style='background:linear-gradient(135deg,#16a34a,#15803d);
                               color:white;
                               padding:18px 45px;

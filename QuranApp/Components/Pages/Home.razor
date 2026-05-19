@@ -10,42 +10,30 @@
 <div style="position:fixed; top:0; left:0; right:0; background:white;
     border-bottom:1px solid #e8e8e8; z-index:1000;
     box-shadow:0 2px 10px rgba(0,0,0,0.08);">
-    <div style="max-width:1200px; margin:0 auto; padding:0 20px;
+    <div style="max-width:1400px; margin:0 auto; padding:0 40px;
         display:flex; justify-content:space-between; align-items:center;
         height:65px;">
-
-        @* Logo *@
         <div style="display:flex; align-items:center; gap:5px;">
             <img src="/images/mlogo.png" style="width:90px; height:50px;" />
             <span style="font-size:20px; font-weight:800; color:#1a1a1a;">
                 QuranApp
             </span>
         </div>
-
-        @* Nav Links *@
         <div style="display:flex; gap:30px; align-items:center;">
             <a href="/quran" style="text-decoration:none; color:#444;
-                font-size:15px; font-weight:500;">
-                Quran
-            </a>
+            font-size:15px; font-weight:500;">Quran</a>
             <a href="/prayer" style="text-decoration:none; color:#444;
-                font-size:15px; font-weight:500;">
-                Prayer
-            </a>
+            font-size:15px; font-weight:500;">Prayer</a>
             <a href="/qibla" style="text-decoration:none; color:#444;
-                font-size:15px; font-weight:500;">
-                Qibla
-            </a>
+            font-size:15px; font-weight:500;">Qibla</a>
             <a href="/asmaulhusna" style="text-decoration:none; color:#444;
                 font-size:15px; font-weight:500;">
                 99 Names
             </a>
-            <a href="/mine" style="text-decoration:none;
-                background:#2e7d52; color:white;
-                padding:8px 20px; border-radius:25px;
-                font-size:14px; font-weight:600;">
-                My Account
-            </a>
+            <a href="/mine" style="text-decoration:none; background:#2e7d52;
+            color:white; padding:8px 20px;
+            border-radius:25px; font-size:14px;
+            font-weight:600;">My Account</a>
         </div>
     </div>
 </div>
@@ -53,20 +41,15 @@
 @* Hero Section *@
 <div style="margin-top:65px; background:linear-gradient(135deg, #f0faf4, #e8f5ee);
     min-height:85vh; display:flex; align-items:center;
-    padding:0 60px; position:relative; overflow:hidden;">
+    padding:0 80px; position:relative; overflow:hidden;">
+    <div style="position:absolute; right:-100px; top:50%;
+    transform:translateY(-50%); width:600px; height:600px;
+    border-radius:50%; background:rgba(46,125,82,0.08);"></div>
+    <div style="position:absolute; right:50px; top:50%;
+    transform:translateY(-50%); width:400px; height:400px;
+    border-radius:50%; background:rgba(46,125,82,0.06);"></div>
 
-    @* Background circle *@
-    <div style="position:absolute; right:-100px; top:50%; transform:translateY(-50%);
-    width:600px; height:600px; border-radius:50%;
-    background:rgba(46,125,82,0.08);"></div>
-    <div style="position:absolute; right:50px; top:50%; transform:translateY(-50%);
-    width:400px; height:400px; border-radius:50%;
-    background:rgba(46,125,82,0.06);"></div>
-
-    @* Left Content *@
     <div style="flex:1; z-index:1;">
-
-        @* City Selector *@
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:20px;">
             <span style="color:#2e7d52; font-size:16px;">📍</span>
             <select @onchange="ChangeCity"
@@ -100,7 +83,6 @@
             <span style="color:#2e7d52;">Web App</span>
         </h1>
 
-        @* Prayer Time Banner *@
         @if (prayerTimes != null)
         {
             <div style="background:white; border-radius:16px; padding:20px 25px;
@@ -115,7 +97,7 @@
                 </div>
                 <div style="width:1px; height:40px; background:#e0e0e0;"></div>
                 <div>
-                    <div style="color:#888; font-size:13px;">Time</div>
+                    <div style="color:#888;font-size:13px;">Time</div>
                     <div style="color:#1a1a1a; font-size:24px; font-weight:800;">
                         @nextPrayerTime
                     </div>
@@ -130,7 +112,6 @@
             </div>
         }
 
-        @* Date *@
         <div style="color:#888; font-size:14px; margin-bottom:30px;">
             @DateTime.Now.ToString("dddd, MMMM d yyyy")
             @if (hijriDate != null)
@@ -139,16 +120,15 @@
             }
         </div>
 
-        @* Buttons *@
         <div style="display:flex; gap:15px;">
             <a href="/quran"
-                   style="background:#2e7d52; color:white; padding:14px 30px;
+               style="background:#2e7d52; color:white; padding:14px 30px;
                 border-radius:30px; text-decoration:none; font-size:16px;
                 font-weight:700; box-shadow:0 4px 15px rgba(46,125,82,0.4);">
                 Read Quran
             </a>
             <a href="/prayer"
-                   style="background:white; color:#2e7d52; padding:14px 30px;
+               style="background:white; color:#2e7d52; padding:14px 30px;
                 border-radius:30px; text-decoration:none; font-size:16px;
                 font-weight:700; border:2px solid #2e7d52;">
                 Prayer Times
@@ -156,160 +136,142 @@
         </div>
     </div>
 
-    @* Right Image *@
     <div style="flex:1; text-align:center; z-index:1;">
-        <img src="/images/quran.png"
+        <img src="/images/Quran1.png"
              style="max-width:450px; width:100%;
         filter:drop-shadow(0 20px 40px rgba(0,0,0,0.15));" />
     </div>
 </div>
 
-@* Features Section Title *@
-<div style="text-align:center; padding:60px 20px 30px 20px; background:white;">
-    <h2 style="font-size:38px; font-weight:900; color:#1a1a1a; margin:0 0 10px 0;">
-        QuranApp Features
-    </h2>
-    <p style="color:#888; font-size:16px; margin:0;">
-        Everything you need for your Islamic journey in one place
-    </p>
-</div>
 
-@* Feature 1 — Quran *@
-<div style="display:flex; align-items:center; padding:60px;
-    background:white; max-width:1200px; margin:0 auto;">
-    <div style="flex:1;">
-        <h2 style="font-size:42px; font-weight:900; color:#1a1a1a; margin:0 0 15px 0;">
-            The Holy Quran
-        </h2>
-        <p style="color:#555; font-weight:600; font-size:16px; margin:0 0 15px 0;">
-            Read and understand the Holy Quran with reliable translations.
-        </p>
-        <p style="color:#777; font-size:15px; line-height:1.8; margin:0 0 15px 0;">
-            Read the complete Holy Quran in beautiful Arabic text with translations
-            in English, Urdu, and Persian. Listen to recitations by world famous
-            reciters and search any Surah or Ayah instantly.
-        </p>
-        <p style="color:#777; font-size:15px; line-height:1.8; margin:0 0 25px 0;">
-            Search for verses and chapters in the Quran in a single click.
-        </p>
-        <a href="/quran"
-               style="background:#2e7d52; color:white; padding:12px 28px;
-            border-radius:25px; text-decoration:none; font-size:15px;
-            font-weight:700;">
-            Read Now
-        </a>
+
+@* Features Section — Clean Full Height Layout *@
+<div style="background:#f4f6f8; padding: 60px 0 0 0; overflow:hidden;">
+    <div style="max-width:1200px; margin:0 auto; padding:0 40px;">
+        <div style="text-align:center; margin-bottom: 40px;">
+            <h2 style="font-size:36px; font-weight:800; color:#1a1a1a; margin:0 0 10px 0;">
+                QuranApp Features
+            </h2>
+            <p style="color:#666; font-size:16px; margin:0;">
+                Everything you need for your Islamic journey in one place
+            </p>
+        </div>
     </div>
-    <div style="flex:1; text-align:center;">
-        <div style="background:linear-gradient(135deg, #e8f5ee, #c8e6c9);
-            border-radius:24px; padding:40px; display:inline-block;
-            box-shadow:0 8px 30px rgba(46,125,82,0.15);">
-            <img src="/images/hp.png" style="max-width:300px; width:100%;" />
+
+    @* Feature Row — Image completely fills the right edge *@
+    <div class="full-feature-row">
+        <div class="text-block">
+            <h3>The Holy Quran</h3>
+            <p class="subtitle">Read and understand the Holy Quran with reliable translations.</p>
+            <p class="description">
+                Read the complete Holy Quran in beautiful Arabic text with translations in English, Urdu, and Persian.
+                Listen to recitations by world famous reciters and search any Surah or Ayah instantly.
+                Search for verses and chapters in the Quran in a single click.
+            </p>
+            <div>
+                <a href="/quran" class="action-btn">Read Now</a>
+            </div>
+        </div>
+
+        <div class="image-block">
+            <img src="/images/q1.png" alt="Quran Screen" />
+        </div>
+    </div>
+</div>
+@* Feature 2 — Hadith *@
+<div class="full-feature-row alternating-bg">
+    <div class="image-block left-aligned-image">
+        <img src="/images/hts.png" alt="Hadith Screen" />
+    </div>
+    <div class="text-block">
+        <h3>Hadith Collections</h3>
+        <p class="subtitle">Read and analyze a comprehensive collection of Hadith in one place.</p>
+        <p class="description">
+            Explore completely digitized, verified authentic Hadith books including Sahih al-Bukhari, 
+            Sahih Muslim, and more. Use our swift index search framework to find references instantly 
+            by topic or number with complete confidence.
+        </p>
+        <div>
+            <a href="/hadith" class="action-btn">Open Hadith</a>
         </div>
     </div>
 </div>
 
-@* Feature 2 — Prayer Times *@
-<div style="display:flex; align-items:center; padding:60px;
-    background:#f8f8f8; max-width:1200px; margin:0 auto;">
-    <div style="flex:1; text-align:center;">
-        <div style="background:linear-gradient(135deg, #e8f5ee, #c8e6c9);
-            border-radius:24px; padding:40px; display:inline-block;
-            box-shadow:0 8px 30px rgba(46,125,82,0.15);">
-            <img src="/images/hpp.png" style="max-width:300px; width:100%;" />
+@* Feature 3 — Prayer *@
+<div class="full-feature-row">
+    <div class="text-block">
+        <h3>Prayer Timings</h3>
+        <p class="subtitle">Never miss a prayer with QuranApp automatic updates.</p>
+        <p class="description">
+            Get precision-accurate prayer times calculated smoothly for your exact city coordinates. 
+            The system delivers a continuous real-time countdown tracking module for upcoming Salah times 
+            so you can balance your daily timetable effortlessly.
+        </p>
+        <div>
+            <a href="/prayer" class="action-btn">Check Times</a>
         </div>
     </div>
-    <div style="flex:1; padding-left:60px;">
-        <h2 style="font-size:42px; font-weight:900; color:#1a1a1a; margin:0 0 15px 0;">
-            Prayer Times
-        </h2>
-        <p style="color:#555; font-weight:600; font-size:16px; margin:0 0 15px 0;">
-            Never miss a prayer with QuranApp.
-        </p>
-        <p style="color:#777; font-size:15px; line-height:1.8; margin:0 0 15px 0;">
-            Get accurate prayer times for any city in the world. Our app
-            shows all five daily prayer times with a live countdown timer
-            so you never miss Salah again.
-        </p>
-        <p style="color:#777; font-size:15px; line-height:1.8; margin:0 0 25px 0;">
-            Check prayer times for your city in a single click.
-        </p>
-        <a href="/prayer"
-               style="background:#2e7d52; color:white; padding:12px 28px;
-            border-radius:25px; text-decoration:none; font-size:15px;
-            font-weight:700;">
-            Check Times
-        </a>
+    <div class="image-block">
+        <img src="/images/p1.png" alt="Prayer Screen" />
     </div>
 </div>
 
-@* Feature 3 — Qibla *@
-<div style="display:flex; align-items:center; padding:60px;
-    background:white; max-width:1200px; margin:0 auto;">
-    <div style="flex:1;">
-        <h2 style="font-size:42px; font-weight:900; color:#1a1a1a; margin:0 0 15px 0;">
-            Qibla Directions
-        </h2>
-        <p style="color:#555; font-weight:600; font-size:16px; margin:0 0 15px 0;">
-            Pray towards the Qibla no matter where you are.
-        </p>
-        <p style="color:#777; font-size:15px; line-height:1.8; margin:0 0 15px 0;">
-            Our Qibla finder uses your GPS location to show the exact
-            direction of the Kaaba in Makkah. Features a beautiful
-            animated compass that points directly toward Qibla.
-        </p>
-        <p style="color:#777; font-size:15px; line-height:1.8; margin:0 0 25px 0;">
-            Find Qibla direction with complete confidence anywhere in the world.
-        </p>
-        <a href="/qibla"
-               style="background:#2e7d52; color:white; padding:12px 28px;
-            border-radius:25px; text-decoration:none; font-size:15px;
-            font-weight:700;">
-            Find Qibla
-        </a>
+@* Feature 4 — Qibla *@
+<div class="full-feature-row alternating-bg">
+    <div class="image-block left-aligned-image">
+        <img src="/images/nq.png" alt="Qibla Screen" />
     </div>
-    <div style="flex:1; text-align:center;">
-        <div style="background:linear-gradient(135deg, #e8f5ee, #c8e6c9);
-            border-radius:24px; padding:40px; display:inline-block;
-            box-shadow:0 8px 30px rgba(46,125,82,0.15);">
-            <img src="/images/hk.png" style="max-width:300px; width:100%;" />
+    <div class="text-block">
+        <h3>Qibla Compass</h3>
+        <p class="subtitle">Pray towards the Qibla no matter your global position.</p>
+        <p class="description">
+            Our embedded Qibla locator coordinates with your active browser GPS geolocation data 
+            to trace the true geographic line to the Kaaba in Makkah. Displays a clean, smooth, 
+            highly responsive virtual pointer utility.
+        </p>
+        <div>
+            <a href="/qibla" class="action-btn">Find Qibla</a>
         </div>
     </div>
 </div>
 
-@* Feature 4 — Tasbih *@
-<div style="display:flex; align-items:center; padding:60px;
-    background:#f8f8f8; max-width:1200px; margin:0 auto;">
-    <div style="flex:1; text-align:center;">
-        <div style="background:linear-gradient(135deg, #e8f5ee, #c8e6c9);
-            border-radius:24px; padding:40px; display:inline-block;
-            box-shadow:0 8px 30px rgba(46,125,82,0.15);">
-            <img src="/images/ht.png" style="max-width:300px; width:100%;" />
+@* Feature 5 — Duas *@
+<div class="full-feature-row">
+    <div class="text-block">
+        <h3>Duas & Supplications</h3>
+        <p class="subtitle">Find relevant duas for different daily situations.</p>
+        <p class="description">
+            Access an extensive structural archive compiled for divine blessings, daily protection, 
+            and targeted spiritual guidance. Every supplication comes complete with standard translations 
+            and phonetic pronunciation guides.
+        </p>
+        <div>
+            <a href="/hadith" class="action-btn">Open Duas</a>
         </div>
     </div>
-    <div style="flex:1; padding-left:60px;">
-        <h2 style="font-size:42px; font-weight:900; color:#1a1a1a; margin:0 0 15px 0;">
-            Tasbih Counter
-        </h2>
-        <p style="color:#555; font-weight:600; font-size:16px; margin:0 0 15px 0;">
-            Count your Dhikr digitally with ease.
-        </p>
-        <p style="color:#777; font-size:15px; line-height:1.8; margin:0 0 15px 0;">
-            Our digital Tasbih counter helps you keep track of your
-            SubhanAllah, Alhamdulillah and Allahu Akbar counts.
-            Simple, clean and easy to use.
-        </p>
-        <p style="color:#777; font-size:15px; line-height:1.8; margin:0 0 25px 0;">
-            Count your Dhikr accurately with a single tap.
-        </p>
-        <a href="/tasbih"
-               style="background:#2e7d52; color:white; padding:12px 28px;
-            border-radius:25px; text-decoration:none; font-size:15px;
-            font-weight:700;">
-            Open Tasbih
-        </a>
+    <div class="image-block">
+        <img src="/images/dua.png" alt="Duas Screen" />
     </div>
 </div>
 
+@* Feature 6 — Translation *@
+<div class="full-feature-row alternating-bg">
+    <div class="image-block left-aligned-image">
+        <img src="/images/taf.png" alt="Translations Screen" />
+    </div>
+    <div class="text-block">
+        <h3>Multi-Language Translations</h3>
+        <p class="subtitle">Learn and understand the Holy Quran via reliable sources.</p>
+        <p class="description">
+            Dive deep into foundational knowledge records using side-by-side textual comparative setups. 
+            Switch smoothly across verified English literal streams, classic Urdu interpretations, and 
+            Persian scripts seamlessly under one unified system layout.
+        </p>
+        <div>
+            <a href="/quran" class="action-btn">Open Quran</a>
+        </div>
+    </div>
+</div>
 @* Quick Access Grid *@
 <div style="background:white; padding:60px 40px; text-align:center;">
     <h2 style="font-size:36px; font-weight:900; color:#1a1a1a; margin:0 0 10px 0;">
@@ -318,13 +280,11 @@
     <p style="color:#888; font-size:16px; margin:0 0 40px 0;">
         Jump to any feature instantly
     </p>
-
     <div style="display:grid; grid-template-columns:repeat(4, 1fr);
         gap:20px; max-width:900px; margin:0 auto;">
 
         <a href="/quran" style="text-decoration:none;">
-            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;
-                transition:all 0.3s; border:2px solid transparent;">
+            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;">
                 <img src="/images/quran.png" style="width:55px; height:55px;" />
                 <div style="font-size:14px; color:#333; margin-top:10px;
                     font-weight:600;">
@@ -334,9 +294,9 @@
         </a>
 
         <a href="/hadith" style="text-decoration:none;">
-            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;
-                border:2px solid transparent;">
-                <img src="/images/high-angle-priest-holding-holy-book.png" style="width:55px; height:55px;" />
+            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;">
+                <img src="/images/high-angle-priest-holding-holy-book.png"
+                     style="width:55px; height:55px;" />
                 <div style="font-size:14px; color:#333; margin-top:10px;
                     font-weight:600;">
                     Hadith
@@ -345,8 +305,7 @@
         </a>
 
         <a href="/tasbih" style="text-decoration:none;">
-            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;
-                border:2px solid transparent;">
+            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;">
                 <img src="/images/t.png" style="width:55px; height:55px;" />
                 <div style="font-size:14px; color:#333; margin-top:10px;
                     font-weight:600;">
@@ -356,8 +315,7 @@
         </a>
 
         <a href="/asmaulhusna" style="text-decoration:none;">
-            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;
-                border:2px solid transparent;">
+            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;">
                 <img src="/images/name.png" style="width:55px; height:55px;" />
                 <div style="font-size:14px; color:#333; margin-top:10px;
                     font-weight:600;">
@@ -367,8 +325,7 @@
         </a>
 
         <a href="/prayer" style="text-decoration:none;">
-            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;
-                border:2px solid transparent;">
+            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;">
                 <img src="/images/prayer.png" style="width:55px; height:55px;" />
                 <div style="font-size:14px; color:#333; margin-top:10px;
                     font-weight:600;">
@@ -378,8 +335,7 @@
         </a>
 
         <a href="/qibla" style="text-decoration:none;">
-            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;
-                border:2px solid transparent;">
+            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;">
                 <img src="/images/kaaba.png" style="width:55px; height:55px;" />
                 <div style="font-size:14px; color:#333; margin-top:10px;
                     font-weight:600;">
@@ -389,12 +345,21 @@
         </a>
 
         <a href="/calendar" style="text-decoration:none;">
-            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;
-                border:2px solid transparent;">
+            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;">
                 <img src="/images/cal.png" style="width:55px; height:55px;" />
                 <div style="font-size:14px; color:#333; margin-top:10px;
                     font-weight:600;">
                     Calendar
+                </div>
+            </div>
+        </a>
+
+        <a href="/mine" style="text-decoration:none;">
+            <div style="background:#f8f8f8; border-radius:16px; padding:25px 15px;">
+                <div style="font-size:40px;">👤</div>
+                <div style="font-size:14px; color:#333; margin-top:10px;
+                    font-weight:600;">
+                    My Account
                 </div>
             </div>
         </a>
@@ -405,11 +370,12 @@
 @* Footer *@
 <div style="background:#1a3a2a; padding:40px; text-align:center;">
     <img src="/images/mlogo.png" style="width:90px; height:50px;" />
-    <h3 style="color:white; margin:0 0 10px 0; font-size:22px;">QuranApp</h3>
+    <h3 style="color:white; margin:10px 0 10px 0; font-size:22px;">QuranApp</h3>
     <p style="color:#b2dfdb; font-size:14px; margin:0 0 5px 0;">
         Your Complete Islamic Companion
     </p>
-    <p style="color:#b2dfdb; font-size:14px; margin:0 0 20px 0;">
+    <p style="color:#b2dfdb; font-size:20px; margin:0 0 20px 0;
+        font-family:Traditional Arabic, serif;">
         بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
     </p>
     <p style="color:#52b788; font-size:13px; margin:0;">
@@ -457,11 +423,11 @@
         var now = DateTime.Now.TimeOfDay;
         var prayers = new List<(string Name, TimeSpan Time)>
         {
-            ("Fajr", ParseTime(prayerTimes.Fajr)),
-            ("Dhuhr", ParseTime(prayerTimes.Dhuhr)),
-            ("Asr", ParseTime(prayerTimes.Asr)),
+            ("Fajr",    ParseTime(prayerTimes.Fajr)),
+            ("Dhuhr",   ParseTime(prayerTimes.Dhuhr)),
+            ("Asr",     ParseTime(prayerTimes.Asr)),
             ("Maghrib", ParseTime(prayerTimes.Maghrib)),
-            ("Isha", ParseTime(prayerTimes.Isha))
+            ("Isha",    ParseTime(prayerTimes.Isha))
         };
         var next = prayers[0];
         foreach (var prayer in prayers)

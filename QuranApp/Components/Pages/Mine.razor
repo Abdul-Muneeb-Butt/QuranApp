@@ -9,57 +9,272 @@
 }
 else
 {
-    <div style="min-height:100vh; background:#f5f5f5; padding-bottom:80px;">
+    <div style="min-height:100vh; background:#f0f4f8;">
 
-        @* Header *@
-        <div style="background:#2e7d52; padding:30px 20px; text-align:center;">
-            <div style="font-size:60px;">👤</div>
-            <h2 style="color:white; margin:10px 0 5px 0;">
+        @* Hero Header *@
+        <div style="background:linear-gradient(135deg, #0a2e1a, #15803d, #16a34a);
+            padding:30px 20px 100px 20px; text-align:center;
+            position:relative; overflow:hidden;">
+
+            @* Background circles *@
+            <div style="position:absolute; top:-50px; right:-50px;
+            width:200px; height:200px; border-radius:50%;
+            background:rgba(255,255,255,0.05);"></div>
+            <div style="position:absolute; bottom:-80px; left:-40px;
+            width:250px; height:250px; border-radius:50%;
+            background:rgba(255,255,255,0.05);"></div>
+
+            @* Avatar *@
+            <div style="width:90px; height:90px; border-radius:50%;
+                background:rgba(255,255,255,0.15);
+                margin:0 auto 15px auto;
+                display:flex; align-items:center; justify-content:center;
+                border:3px solid rgba(255,255,255,0.3);
+                font-size:40px;">
+                👤
+            </div>
+
+            <h2 style="color:white; margin:0 0 5px 0;
+                font-size:26px; font-weight:800;">
                 @SessionService.CurrentUser?.FullName
             </h2>
-            <p style="color:#b2dfdb; font-size:14px;">
+            <p style="color:#bbf7d0; font-size:15px; margin:0 0 5px 0;">
                 @SessionService.CurrentUser?.Email
             </p>
-            <p style="color:#b2dfdb; font-size:12px;">
-                Member since @SessionService.CurrentUser?.CreatedAt.ToString("MMMM yyyy")
-            </p>
+            <div style="display:inline-block; background:rgba(255,255,255,0.15);
+                padding:5px 15px; border-radius:20px; margin-top:10px;">
+                <p style="color:#fef9c3; font-size:12px; margin:0; font-weight:600;">
+                    ✨ Member since
+                    @SessionService.CurrentUser?.CreatedAt.ToString("MMMM yyyy")
+                </p>
+            </div>
         </div>
 
-        @* Menu Items *@
-        <div style="padding:20px;">
+        @* Content *@
+        <div style="max-width:600px; margin:-60px auto 0 auto;
+            padding:0 20px 40px 20px; position:relative; z-index:10;">
 
-            <a href="/quran"
-                   style="text-decoration:none;">
-                <div style="background:white; border-radius:12px;
-                    padding:15px 20px; margin-bottom:10px;
-                    box-shadow:0 2px 8px rgba(0,0,0,0.08);
-                    display:flex; align-items:center; gap:15px;">
-                    <span style="font-size:24px;">📖</span>
-                    <span style="font-size:16px; color:#333;">Quran Reader</span>
-                    <span style="margin-left:auto; color:#888;">›</span>
+            @* Quick Stats *@
+            <div style="background:white; border-radius:20px; padding:25px;
+                box-shadow:0 8px 30px rgba(0,0,0,0.08);
+                margin-bottom:20px;
+                display:grid; grid-template-columns:1fr 1fr 1fr;
+                gap:15px; text-align:center;">
+                <div>
+                    <div style="font-size:35px;">📖</div>
+                    <div style="font-size:13px; color:#888; margin-top:5px;">
+                        Quran
+                    </div>
+                    <div style="font-size:12px; color:#2e7d52; font-weight:600;">
+                        114 Surahs
+                    </div>
                 </div>
-            </a>
+                <div style="border-left:1px solid #f0f0f0;
+                    border-right:1px solid #f0f0f0;">
+                    <div style="font-size:35px;">🧭</div>
+                    <div style="font-size:13px; color:#888; margin-top:5px;">
+                        Qibla
+                    </div>
+                    <div style="font-size:12px; color:#2e7d52; font-weight:600;">
+                        GPS Ready
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size:35px;">📿</div>
+                    <div style="font-size:13px; color:#888; margin-top:5px;">
+                        Tasbih
+                    </div>
+                    <div style="font-size:12px; color:#2e7d52; font-weight:600;">
+                        Daily Dhikr
+                    </div>
+                </div>
+            </div>
 
-            <a href="/prayer"
-                   style="text-decoration:none;">
-                <div style="background:white; border-radius:12px;
-                    padding:15px 20px; margin-bottom:10px;
-                    box-shadow:0 2px 8px rgba(0,0,0,0.08);
-                    display:flex; align-items:center; gap:15px;">
-                    <span style="font-size:24px;">🕐</span>
-                    <span style="font-size:16px; color:#333;">Prayer Times</span>
-                    <span style="margin-left:auto; color:#888;">›</span>
-                </div>
-            </a>
+            @* Menu Items *@
+            <div style="background:white; border-radius:20px; padding:10px;
+                box-shadow:0 8px 30px rgba(0,0,0,0.08);
+                margin-bottom:20px;">
+
+                <a href="/quran" style="text-decoration:none;">
+                    <div style="display:flex; align-items:center; gap:15px;
+                        padding:15px; border-radius:12px;">
+                        <div style="width:45px; height:45px; border-radius:12px;
+                            background:#f0fdf4; display:flex;
+                            align-items:center; justify-content:center;
+                            font-size:22px;">
+                            📖
+                        </div>
+                        <div style="flex:1;">
+                            <div style="font-size:16px; color:#111827; font-weight:600;">
+                                Quran Reader
+                            </div>
+                            <div style="font-size:13px; color:#888;">
+                                Read all 114 Surahs
+                            </div>
+                        </div>
+                        <span style="color:#ccc; font-size:20px;">›</span>
+                    </div>
+                </a>
+
+                <div style="height:1px; background:#f5f5f5; margin:0 15px;"></div>
+
+                <a href="/prayer" style="text-decoration:none;">
+                    <div style="display:flex; align-items:center; gap:15px;
+                        padding:15px; border-radius:12px;">
+                        <div style="width:45px; height:45px; border-radius:12px;
+                            background:#f0fdf4; display:flex;
+                            align-items:center; justify-content:center;
+                            font-size:22px;">
+                            🕐
+                        </div>
+                        <div style="flex:1;">
+                            <div style="font-size:16px; color:#111827; font-weight:600;">
+                                Prayer Times
+                            </div>
+                            <div style="font-size:13px; color:#888;">
+                                5 daily prayer times
+                            </div>
+                        </div>
+                        <span style="color:#ccc; font-size:20px;">›</span>
+                    </div>
+                </a>
+
+                <div style="height:1px; background:#f5f5f5; margin:0 15px;"></div>
+
+                <a href="/qibla" style="text-decoration:none;">
+                    <div style="display:flex; align-items:center; gap:15px;
+                        padding:15px; border-radius:12px;">
+                        <div style="width:45px; height:45px; border-radius:12px;
+                            background:#f0fdf4; display:flex;
+                            align-items:center; justify-content:center;
+                            font-size:22px;">
+                            🧭
+                        </div>
+                        <div style="flex:1;">
+                            <div style="font-size:16px; color:#111827; font-weight:600;">
+                                Qibla Finder
+                            </div>
+                            <div style="font-size:13px; color:#888;">
+                                Find direction to Kaaba
+                            </div>
+                        </div>
+                        <span style="color:#ccc; font-size:20px;">›</span>
+                    </div>
+                </a>
+
+                <div style="height:1px; background:#f5f5f5; margin:0 15px;"></div>
+
+                <a href="/asmaulhusna" style="text-decoration:none;">
+                    <div style="display:flex; align-items:center; gap:15px;
+                        padding:15px; border-radius:12px;">
+                        <div style="width:45px; height:45px; border-radius:12px;
+                            background:#f0fdf4; display:flex;
+                            align-items:center; justify-content:center;
+                            font-size:22px;">
+                            ☪️
+                        </div>
+                        <div style="flex:1;">
+                            <div style="font-size:16px; color:#111827; font-weight:600;">
+                                99 Names of Allah
+                            </div>
+                            <div style="font-size:13px; color:#888;">
+                                Asma ul Husna
+                            </div>
+                        </div>
+                        <span style="color:#ccc; font-size:20px;">›</span>
+                    </div>
+                </a>
+
+                <div style="height:1px; background:#f5f5f5; margin:0 15px;"></div>
+
+                <a href="/tasbih" style="text-decoration:none;">
+                    <div style="display:flex; align-items:center; gap:15px;
+                        padding:15px; border-radius:12px;">
+                        <div style="width:45px; height:45px; border-radius:12px;
+                            background:#f0fdf4; display:flex;
+                            align-items:center; justify-content:center;
+                            font-size:22px;">
+                            📿
+                        </div>
+                        <div style="flex:1;">
+                            <div style="font-size:16px; color:#111827; font-weight:600;">
+                                Tasbih Counter
+                            </div>
+                            <div style="font-size:13px; color:#888;">
+                                Count your daily Dhikr
+                            </div>
+                        </div>
+                        <span style="color:#ccc; font-size:20px;">›</span>
+                    </div>
+                </a>
+
+                <div style="height:1px; background:#f5f5f5; margin:0 15px;"></div>
+
+                <a href="/calendar" style="text-decoration:none;">
+                    <div style="display:flex; align-items:center; gap:15px;
+                        padding:15px; border-radius:12px;">
+                        <div style="width:45px; height:45px; border-radius:12px;
+                            background:#f0fdf4; display:flex;
+                            align-items:center; justify-content:center;
+                            font-size:22px;">
+                            📅
+                        </div>
+                        <div style="flex:1;">
+                            <div style="font-size:16px; color:#111827; font-weight:600;">
+                                Islamic Calendar
+                            </div>
+                            <div style="font-size:13px; color:#888;">
+                                Hijri dates and events
+                            </div>
+                        </div>
+                        <span style="color:#ccc; font-size:20px;">›</span>
+                    </div>
+                </a>
+
+                <div style="height:1px; background:#f5f5f5; margin:0 15px;"></div>
+
+                <a href="/hadith" style="text-decoration:none;">
+                    <div style="display:flex; align-items:center; gap:15px;
+                        padding:15px; border-radius:12px;">
+                        <div style="width:45px; height:45px; border-radius:12px;
+                            background:#f0fdf4; display:flex;
+                            align-items:center; justify-content:center;
+                            font-size:22px;">
+                            📜
+                        </div>
+                        <div style="flex:1;">
+                            <div style="font-size:16px; color:#111827; font-weight:600;">
+                                Hadith
+                            </div>
+                            <div style="font-size:13px; color:#888;">
+                                Daily Islamic wisdom
+                            </div>
+                        </div>
+                        <span style="color:#ccc; font-size:20px;">›</span>
+                    </div>
+                </a>
+
+            </div>
 
             @* Logout Button *@
-            <div style="margin-top:30px;">
-                <button @onclick="HandleLogout"
-                        style="width:100%; padding:14px; background:#e53935;
-                    color:white; border:none; border-radius:8px;
-                    font-size:16px; font-weight:bold; cursor:pointer;">
-                    Logout
-                </button>
+            <button @onclick="HandleLogout"
+                    style="width:100%; padding:16px; background:white;
+                color:#e53935; border:2px solid #e53935;
+                border-radius:16px; font-size:16px;
+                font-weight:700; cursor:pointer;
+                box-shadow:0 4px 15px rgba(229,57,53,0.15);">
+                🚪 Logout
+            </button>
+
+            @* Footer *@
+            <div style="text-align:center; margin-top:30px;">
+                <p style="color:#aaa; font-size:22px; margin:0;
+                    font-family:Traditional Arabic, serif;">
+                    بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                </p>
+                <p style="color:#aaa; font-size:12px; margin:8px 0 0 0;">
+                    QuranApp © 2026 — Air University Islamabad
+                </p>
             </div>
 
         </div>
